@@ -85,18 +85,18 @@ Summmary
 
 
 Goda DB have read priority (with identical concurrency performance will be X writes and 10*X reads). Better use separate servers for high reading and writing.
-```
+
 JSON requests:
-	Read(100%): 70,000 r/s
-	Read(70%)/Write(30%): 30,000/10,000 r/s
-	Read(50%)/Write(50%): 15,000/15,000 r/s
-	Read(30%)/Write(70%): 9,000/18,000 r/s
-	Write(100%): 30,000 r/s
-```
+	- Read(100%): 70,000 r/s
+	- Read(70%)/Write(30%): 30,000/10,000 r/s
+	- Read(50%)/Write(50%): 15,000/15,000 r/s
+	- Read(30%)/Write(70%): 9,000/18,000 r/s
+	- Write(100%): 30,000 r/s
 
 Performance notes:
 Tested on typical desktop hardware. Sender requests and DB instance on only one machine.
 In real world with DB on other machine results will be better (x2), not tested at that moment.
+
 | | |
 | ------------ | ------------- |
 | CPU | Intel(R) Core(TM) i5-4670 CPU @ 3.40GHz, Cores/Logical: 4 |
@@ -134,7 +134,9 @@ At that moment not all code optimized to maximum (Goda not contain C and ASM cod
 ### Maximum database size?
 Tested database up to 30,000,000 values (Data+Hash+Tags+Tree+Full), 50GB storage, 3GB memory. May not have optimizations for larger databases now.
 
+
 ### I care about my data, what about ACID and other acronyms?
+
 ACID - Atomic (partial), Consistency (partial), Isolation (partial), Durability (yes).
 
 Goda DB not provide transaction mechanism in this time. ACID about transactions.
@@ -144,6 +146,7 @@ CAP - Consistency (partial), Availability (yes), Partition tolerance (yes)
 BASE - Basically Available (yes), Soft-state (yes), Eventually consistent (yes)
 
 Data can be corrupted only if process die on write (data in memory buffer). Already writed data and database not be corrupted.
+
 
 ### Hash collision resolution?
 If we doing collision resolution we get x2-x3 memory usage for storing hashes in memory and not stable write speed (x/3-x/2).
@@ -178,18 +181,19 @@ You can add here anything data associated with Data ID, this field fine for inde
 	- true for 35 bytes per each Data entry;
 	- false for 60 bytes per entry with Memo field (DEFAULT).
 - Create custom dictionary
-	*__ATTENTION!!!__ DO THIS OPERATION BEFORE ADDING ANY MEMO FIELDS TO DATABASE*
-	*IF YOU ALREADY HAVE MEMO FIELDS: 1. STOP SERVER; 2. CHANGE DICTIONARY; 3. START SERVER.*
-	Compression with custom dictionary can be 30-60% depends of data.
-	Compressed example (symbol ÿ = 0xFF byte, don't use it in your data): 
-	```
-	ÿ112-10;Title title tile;ÿ2;ÿ3,ÿ4,ÿ5;ÿ63288/32se/35gf/eski/fjeu/ÿ7
-	```
+	- *__ATTENTION!!!__ DO THIS OPERATION BEFORE ADDING ANY MEMO FIELDS TO DATABASE*
+	- *IF YOU ALREADY HAVE MEMO FIELDS: 1. STOP SERVER; 2. CHANGE DICTIONARY; 3. START SERVER.*
+	- Compression with custom dictionary can be 30-60% depends of data.
+	- Compressed example (symbol ÿ = 0xFF byte, don't use it in your data): 
+	- ```ÿ112-10;Title title tile;ÿ2;ÿ3,ÿ4,ÿ5;ÿ63288/32se/35gf/eski/fjeu/ÿ7```
 - Manual creating dictionary
 	1. 255 strokes maximum, 255 values maximum and 3+ length per entry for addding to dictionary.
 	2. Modify file "data/indexname/.dictionary" (RESTART REQUIRED).
 	3. One stroke - one entry. Be careful with spaces and other symbols, this data will used without modification.
-- Performance with 100 elements dictionary. Compress: 180,000 r/s. Decompress: 280,000 r/s. Compress+Decompress: 110,000 r/s.
+- Performance with 100 elements dictionary.
+	- Compress: 180,000 r/s.
+	- Decompress: 280,000 r/s.
+	- Compress+Decompress: 110,000 r/s.
 
 ### Tips and tricks
 Add Goda service on CentOS 7
@@ -200,7 +204,7 @@ vim /usr/lib/systemd/system/goda.service
 ```
 
 ### What may be soon?
-Thinking about: Raft, Master/Master, Sharding, Split-brain, Failover
+Thinking about: Raft, Master/Master, Sharding, Split-brain, Failover.
 
 ### Tasks
 - [ ] Cache

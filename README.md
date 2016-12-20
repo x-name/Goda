@@ -136,9 +136,13 @@ Tested database up to 30,000,000 values (Data+Hash+Tags+Tree+Full), 50GB storage
 
 ### I care about my data, what about ACID and other acronyms?
 ACID - Atomic (partial), Consistency (partial), Isolation (partial), Durability (yes).
+
 Goda DB not provide transaction mechanism in this time. ACID about transactions.
+
 CAP - Consistency (partial), Availability (yes), Partition tolerance (yes)
+
 BASE - Basically Available (yes), Soft-state (yes), Eventually consistent (yes)
+
 Data can be corrupted only if process die on write (data in memory buffer). Already writed data and database not be corrupted.
 
 ### Hash collision resolution?

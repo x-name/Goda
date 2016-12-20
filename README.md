@@ -98,7 +98,7 @@ Summmary
 POST /index/set
 {
 	"Value":{
-		"Data": "
+		"Data": `
 			Place your data in any format (string/bytes/serialized array/etc).
 			Add all your data what you want store, include index data like you add to Tree.
 			Example:
@@ -106,7 +106,7 @@ POST /index/set
 			Text text text.
 			Key for this field
 			...
-		",
+		`,
 		"Hash": ["Key for this field"],
 		"Tags": ["Tag 429", "Tag 963", "Tag 822"],
 		"Full": ["Full-text search field 0"],

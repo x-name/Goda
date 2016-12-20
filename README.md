@@ -2,7 +2,7 @@
 one case - one algorithm
 
 ## Data types
-Data
+* Data
 	On disc data storage
 	Complexity: -> O(1)
 	Features: set, get by id
@@ -12,7 +12,7 @@ Data
 	Read (random): 70,000 r/s
 	Read (segment): 100,000 r/s
 	Use cases: storing data
-Memo
+* Memo
 	Like Data type, but in-memory
 	Complexity: -> O(1)
 	Features: selecting Tree/Tags without Data field, custom dictionary for compression (30-60%)
@@ -21,7 +21,7 @@ Memo
 	Write: 150,000 r/s
 	Read: 200,000 r/s
 	Use cases: storing meta/properties data, fastest selection
-Hash
+* Hash
 	Key-Value storage with in-memory index and disc data storage
 	Complexity: -> O(1)
 	Features: set by key, get by key
@@ -29,7 +29,7 @@ Hash
 	Memory usage: 30MB per 1,000,000 values, 30 bytes/entry
 	Write (Data+Hash): 70,000 r/s
 	Use cases: storing data, storing key for data, external id
-Tags
+* Tags
 	Ordered by adding
 	Complexity: -> O(1)
 	Features: order, offset, limit
@@ -38,7 +38,7 @@ Tags
 	Memory usage: 4MB per 1,000,000 values, 4 bytes/entry
 	Write (Data+Hash+Tags): 65,000 r/s
 	Use cases: tags, terms, taxonomy, navigation, pagination, counting
-Tree
+* Tree
 	Custom ordering by value (0-4294967295)
 	Complexity: -> O(1)
 	Features: order, min/max-range, limit
@@ -46,7 +46,7 @@ Tree
 	Memory usage: 8MB per 1,000,000 values, 8 bytes/entry
 	Write (Data+Hash+Tags+Tree): 55,000 r/s
 	Use cases: sorting data, price, quantity, counting by range
-Full
+* Full
 	Full-text search inverted index
 	Complexity: -> O(1)
 	Features: splitting text by words on Set, maximum word length 8 symbols
@@ -54,7 +54,7 @@ Full
 	Memory usage: 6MB per 1,000,000 values, 6 bytes/entry
 	Write (Data+Hash+Tags+Tree+Full): 35,000 r/s
 	Use cases: text search
-Sum
+* Sum
 	Memory usage: 10MB+ per 1,000,000 values, 10+ bytes/entry, instance - depends of requests
 
 
@@ -74,42 +74,42 @@ Mem: DDR3 1333 MHz
 HDD: WDC WD30EFRX-68EUZN0
 
 
-FAQ
+## FAQ
 
-Where I can use Goda DB?
+### Where I can use Goda DB?
 Any type of web sites/apps where you no need difficult sorting by many values.
 Most of data-types can be reworked for optimal performance/latency with this solution.
 
-Where using Goda DB not good idea?
+### Where using Goda DB not good idea?
 OLAP (difficult indexes, joins and sorting), high-critically data (full ACID), high-concurrent write (sharding).
 
-Replication
+### Replication
 Master/Slave async binary replication. Slaves read-only for strong consistency.
 
-What about perfomance, this is maximum optimization?
+### What about perfomance, this is maximum optimization?
 At that moment not all code optimized to maximum (Goda not contain C and ASM code), but performance realy good.
 
-Maximum database size?
+### Maximum database size?
 Tested database up to 30,000,000 values (Data+Hash+Tags+Tree+Full), 50GB storage, 3GB memory. May not have optimizations for larger databases now.
 
-I care about my data, what about ACID and other acronyms?
+### I care about my data, what about ACID and other acronyms?
 ACID - Atomic (partial), Consistency (partial), Isolation (partial), Durability (yes).
 Goda DB not provide transaction mechanism in this time. ACID about transactions.
 CAP - Consistency (partial), Availability (yes), Partition tolerance (yes)
 BASE - Basically Available (yes), Soft-state (yes), Eventually consistent (yes)
 Data can be corrupted only if process die on write (data in memory buffer). Already writed data and database not be corrupted.
 
-Hash collision resolution?
+### Hash collision resolution?
 If we doing collision resolution we get x2-x3 memory usage for storing hashes in memory and not stable write speed (x/3-x/2).
 64-bit hashtable with FNV-1a hash give below 1 collision per 60,000,000 keys. 
 
-Golang GC not optimal work with large data?
+### Golang GC not optimal work with large data?
 GC problem with high latency on some little percentiles not resolved, but maybe will better on Go 1.8
 Also solution maybe with off-heap memory, but this not implemented now.
 https://github.com/golang/proposal/blob/master/design/17503-eliminate-rescan.md
 https://talks.golang.org/2015/go-gc.pdf
 
-Memory storage, Optimization Memo field
+### Memory storage, Optimization Memo field
 	// ATTENTION!!! This part of features difficult.
 	Memo, like Data type, but in-memory.
 	You can add here anything data associated with Data ID, this field fine for index with metadata (snippets) for fast future selections by Tags/Tree without touching disk.
@@ -133,10 +133,10 @@ Memory storage, Optimization Memo field
 			Decompress: 280,000 r/s
 			Compress+Decompress: 110,000 r/s
 
-What may be soon?
+### What may be soon?
 Thinking about: Raft, Master/Master, Sharding, Split-brain, Failover
 
-Tips and tricks
+### Tips and tricks
 Add Goda service on CentOS 7
 	cd /usr/lib/systemd/system
 	cp /usr/lib/systemd/system/goda.service /usr/lib/systemd/system/goda.service

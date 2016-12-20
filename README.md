@@ -98,10 +98,10 @@ Summmary
 POST /index/set
 {
 	"Value":{
-		"Data": "// Place your data in any format (string/bytes/etc)
-			\"Title\":\"Title field 0\",
-			\"Text\":\"Text text text.\",
-			... // Add all your data what you want store, include index data like in Tree
+		"Data": "# Place your data in any format (string/bytes/etc)
+			\"Title\":\"Title field 0\"
+			\"Text\":\"Text text text.\"
+			... # Add all your data what you want store, include index data like in Tree
 		",
 		"Hash": ["Key for this field"],
 		"Tags": ["Tag 429", "Tag 963", "Tag 822"],

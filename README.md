@@ -37,13 +37,13 @@ Like Data type storage, but in-memory.
 | Use cases | storing meta/properties data, fastest selection |
 ```javascript
 POST /index/tags
-	//... part of set
+	//... part of get by tag
 	"Memo": 1
 	//...
 ```
 ```javascript
 POST /index/set
-	//...
+	//... part of set
 	"Memo": "String for in-memory store."
 	//...
 ```
@@ -150,11 +150,13 @@ POST /index/set
 	//...
 ```
 
-Summmary
+Summary
 
 | | |
 | ------------ | ------------- |
 | Memory usage | 10MB+ per 1,000,000 values, 10+ bytes/entry, instance - depends of requests |
+
+### Complete set request
 ```javascript
 POST /index/set
 {

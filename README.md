@@ -57,11 +57,11 @@ POST /index/tags
 {
 	"Tags": ["Tag 1", "Tag 2"],
 	"Range": {
-		"Order": "ASC", /* Optional, default ASC */
-		"Offset": 0, # Optional, default 0
-		"Limit": 10 // Optional, default 0
+		"Order": "ASC", // Optional (ASC|DESC), default ASC
+		"Offset": 0,    // Optional (0-4294967295), default 0
+		"Limit": 10     // Optional (0-4294967295), default 0
 	},
-	"Memo": 0
+	"Memo": 0 // Optional (0|1), default 0
 }
 ```
 
@@ -94,7 +94,7 @@ Summmary
 | | |
 | ------------ | ------------- |
 | Memory usage | 10MB+ per 1,000,000 values, 10+ bytes/entry, instance - depends of requests |
-```json
+```javascript
 POST /index/set
 {
 	"Value":{
@@ -104,13 +104,15 @@ POST /index/set
 			"Text":"Text text text.",
 			... // Add all your data what you want store, include index data like in Tree
 		}',
-		"Hash":["Key for this field"],
-		"Tags":["Tag 429","Tag 963","Tag 822"],
-		"Full":["Full-text search field 0"],
-		"Tree":{"Data":1480189402},
+		"Hash": ["Key for this field"],
+		"Tags": ["Tag 429", "Tag 963", "Tag 822"],
+		"Full": ["Full-text search field 0"],
+		"Tree": {
+			"Data": 1480189402
+		},
 		"Options":{
-			"Reserve":64, // Optional, default 0; Reserved space for this Data in bytes (Required for Update)
-			"HashDuplicate":0 // Optional, default 0; 0 - not insert on any duplicate key; 1 - not insert if first key duplicate; 2 - insert duplicate without hash key
+			"Reserve": 64,     // Optional, default 0; Reserved space for this Data in bytes (Required for Update)
+			"HashDuplicate": 0 // Optional, default 0; 0 - not insert on any duplicate key; 1 - not insert if first key duplicate; 2 - insert duplicate without hash key
 		}	
 	}
 }
@@ -173,7 +175,6 @@ Tested database up to 30,000,000 values (Data+Hash+Tags+Tree+Full), 50GB storage
 ### I care about my data, what about ACID and other acronyms?
 
 ACID - Atomic (partial), Consistency (partial), Isolation (partial), Durability (yes).
-
 Goda DB not provide transaction mechanism in this time. ACID about transactions.
 
 CAP - Consistency (partial), Availability (yes), Partition tolerance (yes)

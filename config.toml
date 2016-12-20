@@ -1,0 +1,33 @@
+# Goda DB TOML Config
+
+[Storage]
+Listen = "127.0.0.1:6677"
+EffectiveMemo = true # true - 35 bytes per each Data entry; false - 60 bytes per entry with Memo field
+Directory = "E:/data/" # Only with new DB, don't change after creating DB
+Compress = false # Only with new DB, don't change after creating DB
+SegmentSize = 100000 # Don't recommend change this value; Only with new DB, don't change after creating DB
+
+[Replication]
+Master = false
+Nodes = [
+	"127.0.0.1:6677",
+]
+Slave = false
+AllowIP = [
+	"127.0.0.1",
+]
+
+[Performance]
+# Period for writers goruotines
+FreeMemoryOnLoading = true # true - slower 2*x loading, 2*x CPU usage, but better 2/x Memory allocation
+AppendWriterPeriod = 100 # Don't recommend change this value
+TruncateWriterPeriod = 1000 # Don't recommend change this value
+StreamerWriterPeriod = 1000 # Don't recommend change this value
+
+[Durability] # DEPRICATED?
+# Write-ahead logging, 2*x slower write, blocking write when log merging. Better use other physical drive.
+WAL = false
+Directory = "E:/data/"
+
+[Debug]
+Log = true

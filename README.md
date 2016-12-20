@@ -3,13 +3,13 @@
 
 ## Data types
 ### Data
-On disc data storage
+On disc data storage.
 
 | | |
 | ------------ | ------------- |
 | Complexity | -> O(1) |
 | Features | set, get by id |
-| Latency (random) | <1 ms with get 100 values |
+| Latency (random) | <1 ms with get 100 values, in any place of index |
 | Memory usage | 8MB per 1,000,000 values, 8 bytes/entry |
 | Write (Data) | 80,000 r/s |
 | Read (random) | 70,000 r/s |
@@ -17,20 +17,20 @@ On disc data storage
 | Use cases | storing data |
 
 ### Memo
-Like Data type, but in-memory
+Like Data type, but in-memory.
 
 | | |
 | ------------ | ------------- |
 | Complexity | -> O(1) |
 | Features | selecting Tree/Tags without Data field, custom dictionary for compression (30-60%) |
-| Latency | <1 ms with get 200 values |
+| Latency | <1 ms with get 200 values, in any place of index |
 | Memory overhead | 35/60MB per 1,000,000 values, 35/60 bytes/entry |
 | Write | 150,000 r/s |
 | Read | 200,000 r/s |
 | Use cases | storing meta/properties data, fastest selection |
 
 ### Hash
-Key-Value storage with in-memory index and disc data storage
+Key-Value in-memory index for disc Data storage.
 
 | | |
 | ------------ | ------------- |
@@ -42,7 +42,7 @@ Key-Value storage with in-memory index and disc data storage
 | Use cases | storing data, storing key for data, external id |
 
 ### Tags
-Ordered by adding
+Ordered by adding.
 
 | | |
 | ------------ | ------------- |
@@ -51,10 +51,10 @@ Ordered by adding
 | Latency | <1 ms with get 100 values, in any place of index |
 | Memory usage | 4MB per 1,000,000 values, 4 bytes/entry |
 | Write (Data+Hash+Tags) | 65,000 r/s |
-| Use cases | tags, terms, taxonomy, navigation, pagination, counting |
+| Use cases | tags, terms, taxonomy, navigation, pagination, counting, faceted classification |
 
 ### Tree
-Custom ordering by value (0-4294967295)
+Custom ordering by value (0-4294967295).
 
 | | |
 | ------------ | ------------- |
@@ -66,7 +66,7 @@ Custom ordering by value (0-4294967295)
 | Use cases | sorting data, price, quantity, counting by range |
 
 ### Full
-Full-text search inverted index
+Full-text search inverted index.
 
 | | |
 | ------------ | ------------- |
@@ -77,27 +77,31 @@ Full-text search inverted index
 | Write (Data+Hash+Tags+Tree+Full) | 35,000 r/s |
 | Use cases | text search |
 
-### Sum
+Summmary
 
 | | |
 | ------------ | ------------- |
 | Memory usage | 10MB+ per 1,000,000 values, 10+ bytes/entry, instance - depends of requests |
 
 
-Goda DB have read priority (with identical concurrency performance will be X writes and 10*X reads).
-Better use separate servers for high reading and writing.
+Goda DB have read priority (with identical concurrency performance will be X writes and 10*X reads). Better use separate servers for high reading and writing.
+```
 JSON requests:
 	Read(100%): 70,000 r/s
 	Read(70%)/Write(30%): 30,000/10,000 r/s
 	Read(50%)/Write(50%): 15,000/15,000 r/s
 	Read(30%)/Write(70%): 9,000/18,000 r/s
 	Write(100%): 30,000 r/s
+```
+
 Performance notes:
 Tested on typical desktop hardware. Sender requests and DB instance on only one machine.
 In real world with DB on other machine results will be better (x2), not tested at that moment.
-CPU: Intel(R) Core(TM) i5-4670 CPU @ 3.40GHz, Cores/Logical: 4
-Mem: DDR3 1333 MHz
-HDD: WDC WD30EFRX-68EUZN0
+| | |
+| ------------ | ------------- |
+| CPU | Intel(R) Core(TM) i5-4670 CPU @ 3.40GHz, Cores/Logical: 4 |
+| Mem | DDR3 1333 MHz |
+| HDD | WDC WD30EFRX-68EUZN0 |
 
 ## Examples
 ```json
@@ -146,6 +150,13 @@ GC problem with high latency on some little percentiles not resolved, but maybe 
 Also solution maybe with off-heap memory, but this not implemented now.
 https://github.com/golang/proposal/blob/master/design/17503-eliminate-rescan.md
 https://talks.golang.org/2015/go-gc.pdf
+
+### Words about algorithm
+All algorithms contain mix of technologies/realizations.
+Some words: Slice, Map, Index, Hashtable, Bitmap, Inverted Index, Tree.
+
+### Influences
+Redis, Elasticsearch/Lucene/Sphinx, PostgreSQL/SQLite, Berkeley DB.
 
 ### Memory storage, Optimization Memo field
 	// ATTENTION!!! This part of features difficult.

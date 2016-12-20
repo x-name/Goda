@@ -6,7 +6,6 @@
 On disc data storage
 
 | | |
-| ------------ | ------------- |
 | Complexity | -> O(1) |
 | Features | set, get by id |
 | Latency | <1 ms with get 100 values, in any place of index |

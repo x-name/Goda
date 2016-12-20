@@ -100,7 +100,7 @@ POST /index/set
 	"Value":{
 		"Data": `
 			Place your data in any format (string/bytes/json/serialized array/etc).
-			Add all your data what you want store, include index data like you add to Tree.
+			Add all your data what you want store, include duplicate index data like you add to Tree.
 			Example:
 			Text text text.
 			Key for this field
@@ -144,14 +144,100 @@ In real world with DB on other machine results will be better (x2), not tested a
 | HDD | WDC WD30EFRX-68EUZN0 |
 
 ## Examples
-```json
-POST /index/tags
-{
-	"Tags": ["Tag 1", "Tag 2"],
-	"Range": {
-		"Offset": 0,
-		"Limit": 10
+### PHP
+```php
+<?php
+
+$json = [
+	"Title" => "Full-text search field " . rand(0, 9999999),
+	"Text" => "Text text text.",
+	"Date" => time(),
+	"Price" => rand(0, 9999999),
+	"ExtID" => 185,
+	"Tags" => ["Tag 429", "Tag 963", "Tag " . rand(0, 999), "Tag " . rand(0, 9999)],
+];
+
+$r = GodaReq(
+	'http://localhost:6677/index/set',
+	[
+		"Data" => $json,
+		"Hash" => [
+			$json["Title"],
+			(string) $json["ExtID"],
+		],
+		"Tags" => $json["Tags"],
+		"Full" => [
+			$json["Title"],
+		],
+		"Tree" => [
+			"Price" => $json["Price"],
+		],
+		"Options" => [
+			"Reserve" => 0,
+			"HashDuplicate" => 1,
+		],
+	]
+);
+
+var_dump($r);
+
+// Write to disk delayed, you can't get new values immendently
+sleep(1);
+
+$mt = microtime(true);
+
+$r = GodaReq(
+	'http://localhost:6677/index/get',
+	[
+		"Hash" => $json["Title"],
+		//"ID" => 123,
+	]
+);
+
+var_dump($r);
+
+$r = GodaReq(
+	'http://localhost:6677/index/tags',
+	[
+		"Tags" => ["Tag " . rand(0, 999)], // "Tag 822"],
+		"Range" => [
+			"Order" => "DESC",
+			"Offset" => 0,
+			"Limit" => 10,
+		],
+	]
+);
+
+var_dump($r);
+
+$min = rand(0, 9999999);
+$max = $min + rand(0, 9999999);
+$r = GodaReq(
+	'http://localhost:6677/index/tree',
+	[
+		"Tree" => "Price",
+		"Sort" => [
+			"Min" => $min,
+			"Max" => $max,
+			"Order" => "DESC",
+			"Limit" => 10,
+		],
+	]
+);
+
+var_dump($r);
+
+function GodaReq($u, $d) {
+	if (isset($d["Data"])) {
+		$d["Data"] = base64_encode(json_encode($d["Data"]));
 	}
+	return json_decode(file_get_contents($u, false, stream_context_create([
+		'http' => [
+			'header' => "Content-type: application/x-www-form-urlencoded\r\n",
+			'method' => 'POST',
+			'content' => json_encode($d),
+		],
+	])), true);
 }
 
 ```

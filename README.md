@@ -1,26 +1,26 @@
 # Goda DB
-one case - one algorithm
+*one case - one algorithm*
 
 ## Data types
 * Data
-	On disc data storage
-	Complexity: -> O(1)
-	Features: set, get by id
-	Latency: <1 ms with get 100 values, in any place of index
-	Memory usage: 8MB per 1,000,000 values, 8 bytes/entry
-	Write (Data): 80,000 r/s
-	Read (random): 70,000 r/s
-	Read (segment): 100,000 r/s
-	Use cases: storing data
+On disc data storage
+Complexity: -> O(1)
+Features: set, get by id
+Latency: <1 ms with get 100 values, in any place of index
+Memory usage: 8MB per 1,000,000 values, 8 bytes/entry
+Write (Data): 80,000 r/s
+Read (random): 70,000 r/s
+Read (segment): 100,000 r/s
+Use cases: storing data
 * Memo
-	Like Data type, but in-memory
-	Complexity: -> O(1)
-	Features: selecting Tree/Tags without Data field, custom dictionary for compression (30-60%)
-	Latency: <1 ms with get 200 values
-	Memory overhead: 35/60MB per 1,000,000 values, 35/60 bytes/entry
-	Write: 150,000 r/s
-	Read: 200,000 r/s
-	Use cases: storing meta/properties data, fastest selection
+Like Data type, but in-memory
+Complexity: -> O(1)
+Features: selecting Tree/Tags without Data field, custom dictionary for compression (30-60%)
+Latency: <1 ms with get 200 values
+Memory overhead: 35/60MB per 1,000,000 values, 35/60 bytes/entry
+Write: 150,000 r/s
+Read: 200,000 r/s
+Use cases: storing meta/properties data, fastest selection
 * Hash
 	Key-Value storage with in-memory index and disc data storage
 	Complexity: -> O(1)
@@ -73,6 +73,18 @@ CPU: Intel(R) Core(TM) i5-4670 CPU @ 3.40GHz, Cores/Logical: 4
 Mem: DDR3 1333 MHz
 HDD: WDC WD30EFRX-68EUZN0
 
+## Examples
+```json
+POST /index/tags
+{
+	"Tags": ["Tag 1", "Tag 2"],
+	"Range": {
+		"Offset": 0,
+		"Limit": 10
+	}
+}
+
+```
 
 ## FAQ
 
@@ -133,11 +145,17 @@ https://talks.golang.org/2015/go-gc.pdf
 			Decompress: 280,000 r/s
 			Compress+Decompress: 110,000 r/s
 
+### Tips and tricks
+Add Goda service on CentOS 7
+```
+cd /usr/lib/systemd/system
+cp /usr/lib/systemd/system/goda.service /usr/lib/systemd/system/goda.service
+vim /usr/lib/systemd/system/goda.service
+```
+
 ### What may be soon?
 Thinking about: Raft, Master/Master, Sharding, Split-brain, Failover
 
-### Tips and tricks
-Add Goda service on CentOS 7
-	cd /usr/lib/systemd/system
-	cp /usr/lib/systemd/system/goda.service /usr/lib/systemd/system/goda.service
-	vim /usr/lib/systemd/system/goda.service
+### Tasks
+- [ ] Cache
+- [x] Replication

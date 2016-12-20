@@ -52,14 +52,14 @@ Ordered by adding.
 | Memory usage | 4MB per 1,000,000 values, 4 bytes/entry |
 | Write (Data+Hash+Tags) | 65,000 r/s |
 | Use cases | tags, terms, taxonomy, navigation, pagination, counting, faceted classification |
-```json
+```javascript
 POST /index/tags
 {
 	"Tags": ["Tag 1", "Tag 2"],
 	"Range": {
 		"Order": "ASC", /* Optional, default ASC */
-		"Offset": 0,
-		"Limit": 10
+		"Offset": 0, # Optional, default 0
+		"Limit": 10 // Optional, default 0
 	},
 	"Memo": 0
 }

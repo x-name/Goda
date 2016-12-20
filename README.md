@@ -2,7 +2,7 @@
 *one case - one algorithm*
 
 ## Data types
-* Data
+### Data
 On disc data storage
 First Header | Second Header
 ------------ | -------------

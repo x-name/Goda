@@ -1,9 +1,10 @@
 # Goda DB
 *One use case - one algorithm*
+High-performance low-latency database with strong principles.
 
 ## Data types
 All data types strongly limited by functionality for using only effective way paradigms.
-Each data type have robust and good performance.
+Each data type have robust and good performance. Reengineering experience of all databases.
 
 ### Data
 On disc data storage.

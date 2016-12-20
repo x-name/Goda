@@ -165,26 +165,23 @@ Summary
 ```javascript
 POST /index/set
 {
-	"Value":{
-		"Data": `
-			Place your data in any format (string/bytes/json/serialized array/etc).
-			Add all your data what you want store, include duplicate index data like you add to Tree.
-			Example:
-			Text text text.
-			Key for this field
-			{"Tags": ["Tag 429", "Tag 963", "Tag 822"]}
-			...
-		`,
-		"Hash": ["Key for this field"],
-		"Tags": ["Tag 429", "Tag 963", "Tag 822"],
-		"Full": ["Full-text search field 0"],
-		"Tree": {
-			"Data": 1480189402
-		},
-		"Options":{
-			"Reserve": 64,     // Optional, default 0; Reserved space for this Data in bytes (Required for Update)
-			"HashDuplicate": 0 // Optional, default 0; 0 - not insert on any duplicate key; 1 - not insert if first key duplicate; 2 - insert duplicate without hash key
-		}	
+	"Data": `
+		Place your data in any format (string/bytes/json/serialized array/etc).
+		Add all your data what you want store, include duplicate index data like you add to Tree.
+		Example:
+		Text text text.
+		Key for this field
+		{"Tags": ["Tag 429", "Tag 963", "Tag 822"]}
+		...
+	`, // Required
+	"Memo": "Memo index text data", // Optional
+	"Hash": ["Key for this field"], // Optional
+	"Tags": ["Tag 429", "Tag 963"], // Optional
+	"Full": ["Full-text search"],   // Optional
+	"Tree": {"Data": 1480189402},   // Optional
+	"Options":{
+		"Reserve": 64,     // Optional, default 0; Reserved space for this Data in bytes (Required for Update)
+		"HashDuplicate": 0 // Optional, default 0; 0 - not insert on any duplicate key; 1 - not insert if first key duplicate; 2 - insert duplicate without hash key
 	}
 }
 ```
@@ -363,6 +360,7 @@ Data can be corrupted only if process die on write (data in memory buffer). Alre
 
 
 ### Hash collision resolution?
+No collision resolution right now.
 If we doing collision resolution we get x2-x3 memory usage for storing hashes in memory and not stable write speed (x/3-x/2).
 64-bit hashtable with FNV-1a hash give below 1 collision per 60,000,000 keys. 
 
@@ -419,6 +417,19 @@ cd /usr/lib/systemd/system
 cp /usr/lib/systemd/system/goda.service /usr/lib/systemd/system/goda.service
 vim /usr/lib/systemd/system/goda.service
 ```
+```
+[Unit]
+Description=Goda
+[Service]
+PIDFile=/tmp/goda.pid
+User=goda
+Group=goda
+WorkingDirectory=/home/go/src/github.com/tumashov/Goda
+ExecStart=/bin/bash -c '/home/go/src/github.com/tumashov/Goda/goda config.toml'
+[Install]
+WantedBy=multi-user.target
+```
+
 
 ### What may be soon?
 Thinking about: Raft, Master/Master, Sharding, Split-brain, Failover.

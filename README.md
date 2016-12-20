@@ -411,7 +411,7 @@ You can add here anything data associated with Data ID, this field fine for inde
 	| Compress+Decompress | 110,000 r/s |
 
 ### Tips and tricks
-- Use Goda instance for each database. This add more (10-20MB per instance) overhead, but this is better solution.
+- Use Goda instance for each database. This add overhead (10-20MB per instance), but this is better solution. Goda instance can have multiple databases, but at that moment we don't see any reason for that.
 
 Add Goda service on CentOS 7
 ```bash

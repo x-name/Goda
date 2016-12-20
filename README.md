@@ -16,7 +16,7 @@ On disc data storage
 | Read (segment) | 100,000 r/s |
 | Use cases | storing data |
 
-* Memo
+### Memo
 Like Data type, but in-memory
 
 | | |
@@ -24,12 +24,12 @@ Like Data type, but in-memory
 | Complexity | -> O(1) |
 | Features | selecting Tree/Tags without Data field, custom dictionary for compression (30-60%) |
 | Latency | <1 ms with get 200 values |
-| Memory overhead: 35/60MB per 1,000,000 values, 35/60 bytes/entry |
+| Memory overhead | 35/60MB per 1,000,000 values, 35/60 bytes/entry |
 | Write | 150,000 r/s |
 | Read | 200,000 r/s |
 | Use cases | storing meta/properties data, fastest selection |
 
-* Hash
+### Hash
 Key-Value storage with in-memory index and disc data storage
 
 | | |
@@ -41,7 +41,7 @@ Key-Value storage with in-memory index and disc data storage
 | Write (Data+Hash) | 70,000 r/s |
 | Use cases | storing data, storing key for data, external id |
 
-* Tags
+### Tags
 Ordered by adding
 
 | | |
@@ -53,7 +53,7 @@ Ordered by adding
 | Write (Data+Hash+Tags) | 65,000 r/s |
 | Use cases | tags, terms, taxonomy, navigation, pagination, counting |
 
-* Tree
+### Tree
 Custom ordering by value (0-4294967295)
 
 | | |
@@ -65,7 +65,7 @@ Custom ordering by value (0-4294967295)
 | Write (Data+Hash+Tags+Tree) | 55,000 r/s |
 | Use cases | sorting data, price, quantity, counting by range |
 
-* Full
+### Full
 Full-text search inverted index
 
 | | |
@@ -77,7 +77,7 @@ Full-text search inverted index
 | Write (Data+Hash+Tags+Tree+Full) | 35,000 r/s |
 | Use cases | text search |
 
-* Sum
+### Sum
 
 | | |
 | ------------ | ------------- |

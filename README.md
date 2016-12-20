@@ -5,6 +5,7 @@
 ### Data
 On disc data storage
 
+| | |
 | ------------ | ------------- |
 | Complexity | -> O(1) |
 | Features | set, get by id |

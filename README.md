@@ -1,7 +1,10 @@
 # Goda DB
-*one case - one algorithm*
+*One use case - one algorithm*
 
 ## Data types
+All data types strongly limited by functionality for using only effective way paradigms.
+Each data type have robust and good performance.
+
 ### Data
 On disc data storage.
 
@@ -156,7 +159,7 @@ Summary
 | ------------ | ------------- |
 | Memory usage | 10MB+ per 1,000,000 values, 10+ bytes/entry, instance - depends of requests |
 
-### Complete set request
+### Complete set request example
 ```javascript
 POST /index/set
 {
@@ -310,15 +313,13 @@ function GodaReq($u, $d) {
 	curl_setopt($_GodaCurl, CURLOPT_POSTFIELDS, json_encode($d));
 
 	$r = json_decode(curl_exec($_GodaCurl), true);
-	if (!$r["Status"] && $ignore_error === false) {
+	if (!$r["Status"]) {
 		header('504 Gateway Time-out', true, 504);
 		print $r["Results"][0];
 		die;
 	}
 	foreach ($r["Results"] as $k => $v) {
-		if ($json_auto_encode) {
-			$r["Results"][$k] = json_decode(trim($v), true);
-		}
+		$r["Results"][$k] = json_decode(trim($v), true);
 		$r["Results"][$k]["memo"] = $v;
 		$r["Results"][$k]["id"] = $k;
 	}
@@ -337,13 +338,14 @@ Most of data-types can be reworked for optimal performance/latency with this sol
 OLAP (difficult indexes, joins and sorting), high-critically data (full ACID), high-concurrent write (sharding).
 
 ### Replication
+*Not yet tested*
 Master/Slave async binary replication. Slaves read-only for strong consistency.
 
 ### What about perfomance, this is maximum optimization?
 At that moment not all code optimized to maximum (Goda not contain C and ASM code), but performance realy good.
 
 ### Maximum database size?
-Tested database up to 30,000,000 values (Data+Hash+Tags+Tree+Full), 50GB storage, 3GB memory. May not have optimizations for larger databases now.
+Tested database up to 30,000,000 values (Data+Hash+Tags+Tree+Full), 50GB storage, 3GB memory. May not have optimizations for larger databases now. Big data will be tested ASAP.
 
 
 ### I care about my data, what about ACID and other acronyms?
@@ -421,4 +423,6 @@ Thinking about: Raft, Master/Master, Sharding, Split-brain, Failover.
 
 ### Tasks
 - [ ] Cache
+- [ ] Time Series DB layer
+	- (Tree with time range for counting Tags by time, ID alias with timestamp)
 - [x] Replication

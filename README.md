@@ -15,6 +15,13 @@ On disc data storage.
 | Read (random) | 70,000 r/s |
 | Read (segment) | 100,000 r/s |
 | Use cases | storing data |
+```javascript
+POST /index/get
+{
+	"ID": 1
+}
+```
+Complete Set example will be below.
 
 ### Memo
 Like Data type storage, but in-memory.
@@ -28,6 +35,12 @@ Like Data type storage, but in-memory.
 | Write | 150,000 r/s |
 | Read | 200,000 r/s |
 | Use cases | storing meta/properties data, fastest selection |
+```javascript
+// Set
+	//...
+	"Memo": "String for in-memory store."
+	//...
+```
 
 ### Hash
 Key-Value in-memory index for disc Data storage.
@@ -40,6 +53,18 @@ Key-Value in-memory index for disc Data storage.
 | Memory usage | 30MB per 1,000,000 values, 30 bytes/entry |
 | Write (Data+Hash) | 70,000 r/s |
 | Use cases | storing data, storing key for data, external id |
+```javascript
+POST /index/get
+{
+	"Hash": "Key for data"
+}
+```
+```javascript
+// Set
+	//...
+	"Hash": ["Key for data", "Second key"]
+	//...
+```
 
 ### Tags
 Ordered by adding.
@@ -64,6 +89,12 @@ POST /index/tags
 	"Memo": 0 // Optional (0|1), default 0
 }
 ```
+```javascript
+// Set
+	//...
+	"Tags": ["Tag 1", "Tag 2"]
+	//...
+```
 
 ### Tree
 Custom ordering by value (0-4294967295).
@@ -76,6 +107,24 @@ Custom ordering by value (0-4294967295).
 | Memory usage | 8MB per 1,000,000 values, 8 bytes/entry |
 | Write (Data+Hash+Tags+Tree) | 55,000 r/s |
 | Use cases | sorting data, price, quantity, counting by range |
+```javascript
+POST /index/tree
+{
+	"Sort": {
+		"Tree":  "Date",     // Required
+		"Min":   1480765500, // Optional, default 0
+		"Max":   0,          // Optional, default 0
+		"Order": "ASC",      // Optional (ASC|DESC), default ASC
+		"Limit": 10          // Optional, default 0
+	}
+}
+```
+```javascript
+// Set
+	//...
+	"Tree": ["Date": 12345671, "Price": 1254]
+	//...
+```
 
 ### Full
 Full-text search inverted index.
@@ -88,6 +137,12 @@ Full-text search inverted index.
 | Memory usage | 6MB per 1,000,000 values, 6 bytes/entry |
 | Write (Data+Hash+Tags+Tree+Full) | 35,000 r/s |
 | Use cases | text search |
+```javascript
+// Set
+	//...
+	"Full": ["Full text search data field."]
+	//...
+```
 
 Summmary
 
@@ -144,9 +199,11 @@ In real world with DB on other machine results will be better (x2), not tested a
 | HDD | WDC WD30EFRX-68EUZN0 |
 
 ## Examples
-### PHP
+### PHP. Complete example. How to work with Goda DB JSON API
 ```php
 <?php
+
+GodaInit();
 
 $json = [
 	"Title" => "Full-text search field " . rand(0, 9999999),
@@ -183,8 +240,6 @@ var_dump($r);
 
 // Write to disk delayed, you can't get new values immendently
 sleep(1);
-
-$mt = microtime(true);
 
 $r = GodaReq(
 	'http://localhost:6677/index/get',
@@ -227,17 +282,39 @@ $r = GodaReq(
 
 var_dump($r);
 
+function GodaInit() {
+	global $_GodaCurl;
+	$_GodaCurl = curl_init();
+}
+function GodaClose() {
+	global $_GodaCurl;
+	curl_close($_GodaCurl);
+}
 function GodaReq($u, $d) {
-	if (isset($d["Data"])) {
-		$d["Data"] = base64_encode(json_encode($d["Data"]));
+	global $_GodaCurl, $_GodaReqCount;
+	$_GodaReqCount++;
+
+	if(strlen($d["Data"]) > 0) $d["Data"] = base64_encode(json_encode($d["Data"]));
+
+	curl_setopt($_GodaCurl, CURLOPT_URL, $u);
+	curl_setopt($_GodaCurl, CURLOPT_RETURNTRANSFER, true);
+	curl_setopt($_GodaCurl, CURLOPT_POST, true);
+	curl_setopt($_GodaCurl, CURLOPT_POSTFIELDS, json_encode($d));
+
+	$r = json_decode(curl_exec($_GodaCurl), true);
+	if (!$r["Status"] && $ignore_error === false) {
+		header('504 Gateway Time-out', true, 504);
+		print $r["Results"][0];
+		die;
 	}
-	return json_decode(file_get_contents($u, false, stream_context_create([
-		'http' => [
-			'header' => "Content-type: application/x-www-form-urlencoded\r\n",
-			'method' => 'POST',
-			'content' => json_encode($d),
-		],
-	])), true);
+	foreach ($r["Results"] as $k => $v) {
+		if ($json_auto_encode) {
+			$r["Results"][$k] = json_decode(trim($v), true);
+		}
+		$r["Results"][$k]["memo"] = $v;
+		$r["Results"][$k]["id"] = $k;
+	}
+	return $r;
 }
 
 ```

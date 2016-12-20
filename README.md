@@ -14,7 +14,7 @@ On disc data storage.
 | Write (Data) | 80,000 r/s |
 | Read (random) | 70,000 r/s |
 | Read (segment) | 100,000 r/s |
-| Use cases | storing data |
+| Use cases | storing data, auto increment ID |
 ```javascript
 POST /index/get
 {
@@ -36,7 +36,13 @@ Like Data type storage, but in-memory.
 | Read | 200,000 r/s |
 | Use cases | storing meta/properties data, fastest selection |
 ```javascript
-// Set
+POST /index/tags
+	//...
+	"Memo": 1
+	//...
+```
+```javascript
+POST /index/set
 	//...
 	"Memo": "String for in-memory store."
 	//...
@@ -60,7 +66,7 @@ POST /index/get
 }
 ```
 ```javascript
-// Set
+POST /index/set
 	//...
 	"Hash": ["Key for data", "Second key"]
 	//...
@@ -90,7 +96,7 @@ POST /index/tags
 }
 ```
 ```javascript
-// Set
+POST /index/set
 	//...
 	"Tags": ["Tag 1", "Tag 2"]
 	//...
@@ -120,7 +126,7 @@ POST /index/tree
 }
 ```
 ```javascript
-// Set
+POST /index/set
 	//...
 	"Tree": ["Date": 12345671, "Price": 1254]
 	//...
@@ -138,7 +144,7 @@ Full-text search inverted index.
 | Write (Data+Hash+Tags+Tree+Full) | 35,000 r/s |
 | Use cases | text search |
 ```javascript
-// Set
+POST /index/set
 	//...
 	"Full": ["Full text search data field."]
 	//...

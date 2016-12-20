@@ -37,7 +37,7 @@ Like Data type storage, but in-memory.
 | Use cases | storing meta/properties data, fastest selection |
 ```javascript
 POST /index/tags
-	//...
+	//... part of set
 	"Memo": 1
 	//...
 ```
@@ -67,7 +67,7 @@ POST /index/get
 ```
 ```javascript
 POST /index/set
-	//...
+	//... part of set
 	"Hash": ["Key for data", "Second key"]
 	//...
 ```
@@ -97,7 +97,7 @@ POST /index/tags
 ```
 ```javascript
 POST /index/set
-	//...
+	//... part of set
 	"Tags": ["Tag 1", "Tag 2"]
 	//...
 ```
@@ -127,7 +127,7 @@ POST /index/tree
 ```
 ```javascript
 POST /index/set
-	//...
+	//... part of set
 	"Tree": ["Date": 12345671, "Price": 1254]
 	//...
 ```
@@ -145,7 +145,7 @@ Full-text search inverted index.
 | Use cases | text search |
 ```javascript
 POST /index/set
-	//...
+	//... part of set
 	"Full": ["Full text search data field."]
 	//...
 ```

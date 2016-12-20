@@ -9,7 +9,7 @@ On disc data storage.
 | ------------ | ------------- |
 | Complexity | -> O(1) |
 | Features | set, get by id |
-| Latency (random) | <1 ms with get 100 values, in any place of index |
+| Latency (random) | <1 ms with get 100 values, in any place of index, depend from HDD/SSD/Cache |
 | Memory usage | 8MB per 1,000,000 values, 8 bytes/entry |
 | Write (Data) | 80,000 r/s |
 | Read (random) | 70,000 r/s |
@@ -17,7 +17,7 @@ On disc data storage.
 | Use cases | storing data |
 
 ### Memo
-Like Data type, but in-memory.
+Like Data type storage, but in-memory.
 
 | | |
 | ------------ | ------------- |
@@ -52,6 +52,17 @@ Ordered by adding.
 | Memory usage | 4MB per 1,000,000 values, 4 bytes/entry |
 | Write (Data+Hash+Tags) | 65,000 r/s |
 | Use cases | tags, terms, taxonomy, navigation, pagination, counting, faceted classification |
+```json
+POST /index/tags
+{
+	"Tags": ["Tag 1", "Tag 2"],
+	"Range": {
+		"Offset": 0,
+		"Limit": 10
+	}
+}
+
+```
 
 ### Tree
 Custom ordering by value (0-4294967295).
@@ -82,7 +93,27 @@ Summmary
 | | |
 | ------------ | ------------- |
 | Memory usage | 10MB+ per 1,000,000 values, 10+ bytes/entry, instance - depends of requests |
-
+```json
+POST /index/set
+{
+	"Value":{
+		"Data":'{
+			// Place your data in any format (string/bytes/etc)
+			"Title":"Title field 0",
+			"Text":"Text text text.",
+			... // Add all your data what you want store, include index data like in Tree
+		}',
+		"Hash":["Key for this field"],
+		"Tags":["Tag 429","Tag 963","Tag 822"],
+		"Full":["Full-text search field 0"],
+		"Tree":{"Data":1480189402},
+		"Options":{
+			"Reserve":64, // Optional, default 0; Reserved space for this Data in bytes (Required for Update)
+			"HashDuplicate":0 // Optional, default 0; 0 - not insert on any duplicate key; 1 - not insert if first key duplicate; 2 - insert duplicate without hash key
+		}	
+	}
+}
+```
 
 Goda DB have read priority (with identical concurrency performance will be X writes and 10*X reads). Better use separate servers for high reading and writing.
 

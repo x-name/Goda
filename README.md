@@ -4,16 +4,16 @@
 ## Data types
 ### Data
 On disc data storage
-First Header | Second Header
------------- | -------------
-Complexity | -> O(1)
-Features | set, get by id
-Latency | <1 ms with get 100 values, in any place of index
-Memory usage | 8MB per 1,000,000 values, 8 bytes/entry
-Write (Data) | 80,000 r/s
-Read (random) | 70,000 r/s
-Read (segment) | 100,000 r/s
-Use cases | storing data
+| First Header | Second Header |
+| ------------ | ------------- |
+| Complexity | -> O(1) |
+| Features | set, get by id |
+| Latency | <1 ms with get 100 values, in any place of index |
+| Memory usage | 8MB per 1,000,000 values, 8 bytes/entry |
+| Write (Data) | 80,000 r/s |
+| Read (random) | 70,000 r/s |
+| Read (segment) | 100,000 r/s |
+| Use cases | storing data |
 * Memo
 Like Data type, but in-memory
 Complexity: -> O(1)
@@ -149,7 +149,7 @@ https://talks.golang.org/2015/go-gc.pdf
 
 ### Tips and tricks
 Add Goda service on CentOS 7
-```
+```bash
 cd /usr/lib/systemd/system
 cp /usr/lib/systemd/system/goda.service /usr/lib/systemd/system/goda.service
 vim /usr/lib/systemd/system/goda.service

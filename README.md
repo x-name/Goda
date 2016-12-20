@@ -422,7 +422,13 @@ vim /usr/lib/systemd/system/goda.service
 Thinking about: Raft, Master/Master, Sharding, Split-brain, Failover.
 
 ### Tasks
-- [ ] Cache
 - [ ] Time Series DB layer
-	- (Tree with time range for counting Tags by time, ID alias with timestamp)
-- [x] Replication
+	- Tree with time range for counting Tags by time (ID alias with timestamp)
+- [ ] Cache
+	- [x] Implementation
+	- [ ] Testing
+- [ ] Replication
+	- [x] Implementation
+	- [ ] Testing
+
+Work in progress. Alpha version. Don't try use this on production.

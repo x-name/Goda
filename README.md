@@ -99,12 +99,12 @@ POST /index/set
 {
 	"Value":{
 		"Data": `
-			Place your data in any format (string/bytes/serialized array/etc).
+			Place your data in any format (string/bytes/json/serialized array/etc).
 			Add all your data what you want store, include index data like you add to Tree.
 			Example:
-			Title field 0
 			Text text text.
 			Key for this field
+			{"Tags": ["Tag 429", "Tag 963", "Tag 822"]}
 			...
 		`,
 		"Hash": ["Key for this field"],

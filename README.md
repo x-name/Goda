@@ -4,6 +4,7 @@
 ## Data types
 ### Data
 On disc data storage
+
 | First Header | Second Header |
 | ------------ | ------------- |
 | Complexity | -> O(1) |
@@ -14,6 +15,7 @@ On disc data storage
 | Read (random) | 70,000 r/s |
 | Read (segment) | 100,000 r/s |
 | Use cases | storing data |
+
 * Memo
 Like Data type, but in-memory
 Complexity: -> O(1)

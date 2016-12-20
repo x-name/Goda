@@ -5,7 +5,6 @@
 ### Data
 On disc data storage
 
-| First Header | Second Header |
 | ------------ | ------------- |
 | Complexity | -> O(1) |
 | Features | set, get by id |

@@ -158,29 +158,37 @@ Some words: Slice, Map, Index, Hashtable, Bitmap, Inverted Index, Tree.
 ### Influences
 Redis, Elasticsearch/Lucene/Sphinx, PostgreSQL/SQLite, Berkeley DB.
 
+### Features Goda DB by keywords
+High-effectivity, Low memory usage, High-performance, Log-structured, Append-only, Off-memory storage, Index, Bitmap, Tree, Tags, Full-text search, Inverted Index, JSON API, BASE, CAP (AP), Replication.
+
 ### Memory storage, Optimization Memo field
-	// ATTENTION!!! This part of features difficult.
-	Memo, like Data type, but in-memory.
-	You can add here anything data associated with Data ID, this field fine for index with metadata (snippets) for fast future selections by Tags/Tree without touching disk.
-		Something like this:
-			2016-12-10;Title title title;domain.com;Tag 1,Tag 2,Tag 53;http://cdn2.aefekef.example.com/3288/32se/35gf/eski/fjeu/img_1.jpg
-		You can select type of overhead in config, EffectiveMemo variable (RESTART REQUIRED):
-			true for 35 bytes per each Data entry;
-			false for 60 bytes per entry with Memo field (DEFAULT).
-	Create custom dictionary
-		// ATTENTION!!! DO THIS OPERATION BEFORE ADDING ANY MEMO FIELDS TO DATABASE
-		// IF YOU ALREADY HAVE MEMO FIELDS: 1. STOP SERVER; 2. CHANGE DICTIONARY; 3. START SERVER.
-		Compression with custom dictionary can be 30-60% depends of data.
-		Compressed example (symbol ÿ = 0xFF byte, don't use it in your data): 
-			ÿ112-10;Title title tile;ÿ2;ÿ3,ÿ4,ÿ5;ÿ63288/32se/35gf/eski/fjeu/ÿ7
-		Manual creating dictionary
-			255 strokes maximum, 255 values maximum and 3+ length per entry for addding to dictionary.
-			Modify file "data/indexname/.dictionary" (RESTART REQUIRED).
-			One stroke - one entry. Be careful with spaces and other symbols, this data will used without modification.
-		Performance with 100 elements dictionary
-			Compress: 180,000 r/s
-			Decompress: 280,000 r/s
-			Compress+Decompress: 110,000 r/s
+*__ATTENTION!!!__ This part of features difficult.*
+Memo, like Data type, but in-memory.
+You can add here anything data associated with Data ID, this field fine for index with metadata (snippets) for fast future selections by Tags/Tree without touching disk.
+
+- Something like this:
+```
+2016-12-10;Title title title;domain.com;Tag 1,Tag 2,Tag 53;http://cdn2.aefekef.example.com/3288/32se/35gf/eski/fjeu/img_1.jpg
+```
+- You can select type of overhead in config, EffectiveMemo variable (RESTART REQUIRED):
+	- true for 35 bytes per each Data entry;
+	- false for 60 bytes per entry with Memo field (DEFAULT).
+* Create custom dictionary
+*__ATTENTION!!!__ DO THIS OPERATION BEFORE ADDING ANY MEMO FIELDS TO DATABASE*
+*IF YOU ALREADY HAVE MEMO FIELDS: 1. STOP SERVER; 2. CHANGE DICTIONARY; 3. START SERVER.*
+Compression with custom dictionary can be 30-60% depends of data.
+Compressed example (symbol ÿ = 0xFF byte, don't use it in your data): 
+```
+ÿ112-10;Title title tile;ÿ2;ÿ3,ÿ4,ÿ5;ÿ63288/32se/35gf/eski/fjeu/ÿ7
+```
+- Manual creating dictionary
+	1. 255 strokes maximum, 255 values maximum and 3+ length per entry for addding to dictionary.
+	2. Modify file "data/indexname/.dictionary" (RESTART REQUIRED).
+	3. One stroke - one entry. Be careful with spaces and other symbols, this data will used without modification.
+- Performance with 100 elements dictionary
+	Compress: 180,000 r/s
+	Decompress: 280,000 r/s
+	Compress+Decompress: 110,000 r/s
 
 ### Tips and tricks
 Add Goda service on CentOS 7

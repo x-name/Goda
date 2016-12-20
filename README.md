@@ -87,11 +87,14 @@ Summmary
 Goda DB have read priority (with identical concurrency performance will be X writes and 10*X reads). Better use separate servers for high reading and writing.
 
 JSON requests:
-	- Read(100%): 70,000 r/s
-	- Read(70%)/Write(30%): 30,000/10,000 r/s
-	- Read(50%)/Write(50%): 15,000/15,000 r/s
-	- Read(30%)/Write(70%): 9,000/18,000 r/s
-	- Write(100%): 30,000 r/s
+
+| | |
+| ------------ | ------------- |
+| Read(100%) | 70,000 r/s |
+| Read(70%)/Write(30%) | 30,000/10,000 r/s |
+| Read(50%)/Write(50%) | 15,000/15,000 r/s |
+| Read(30%)/Write(70%) | 9,000/18,000 r/s |
+| Write(100%) | 30,000 r/s |
 
 Performance notes:
 Tested on typical desktop hardware. Sender requests and DB instance on only one machine.
@@ -191,9 +194,11 @@ You can add here anything data associated with Data ID, this field fine for inde
 	2. Modify file "data/indexname/.dictionary" (RESTART REQUIRED).
 	3. One stroke - one entry. Be careful with spaces and other symbols, this data will used without modification.
 - Performance with 100 elements dictionary.
-	- Compress: 180,000 r/s.
-	- Decompress: 280,000 r/s.
-	- Compress+Decompress: 110,000 r/s.
+	| | |
+	| ------------ | ------------- |
+	| Compress | 180,000 r/s |
+	| Decompress | 280,000 r/s |
+	| Compress+Decompress | 110,000 r/s |
 
 ### Tips and tricks
 Add Goda service on CentOS 7

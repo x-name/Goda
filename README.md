@@ -17,51 +17,71 @@ On disc data storage
 | Use cases | storing data |
 
 * Memo
-
 Like Data type, but in-memory
-Complexity: -> O(1)
-Features: selecting Tree/Tags without Data field, custom dictionary for compression (30-60%)
-Latency: <1 ms with get 200 values
-Memory overhead: 35/60MB per 1,000,000 values, 35/60 bytes/entry
-Write: 150,000 r/s
-Read: 200,000 r/s
-Use cases: storing meta/properties data, fastest selection
+
+| | |
+| ------------ | ------------- |
+| Complexity | -> O(1) |
+| Features | selecting Tree/Tags without Data field, custom dictionary for compression (30-60%) |
+| Latency | <1 ms with get 200 values |
+| Memory overhead: 35/60MB per 1,000,000 values, 35/60 bytes/entry |
+| Write | 150,000 r/s |
+| Read | 200,000 r/s |
+| Use cases | storing meta/properties data, fastest selection |
 
 * Hash
-	Key-Value storage with in-memory index and disc data storage
-	Complexity: -> O(1)
-	Features: set by key, get by key
-	Latency: <1 ms with get 100 values, in any place of index
-	Memory usage: 30MB per 1,000,000 values, 30 bytes/entry
-	Write (Data+Hash): 70,000 r/s
-	Use cases: storing data, storing key for data, external id
+Key-Value storage with in-memory index and disc data storage
+
+| | |
+| ------------ | ------------- |
+| Complexity | -> O(1) |
+| Features | set by key, get by key |
+| Latency | <1 ms with get 100 values, in any place of index |
+| Memory usage | 30MB per 1,000,000 values, 30 bytes/entry |
+| Write (Data+Hash) | 70,000 r/s |
+| Use cases | storing data, storing key for data, external id |
+
 * Tags
-	Ordered by adding
-	Complexity: -> O(1)
-	Features: order, offset, limit
-		selection types: single [tag1], intersect [tag1,tag2], intersect by group [tag1,tag2,tag3+tag4], exclude [tag1,tag2,^tag3]
-	Latency: <1 ms with get 100 values, in any place of index
-	Memory usage: 4MB per 1,000,000 values, 4 bytes/entry
-	Write (Data+Hash+Tags): 65,000 r/s
-	Use cases: tags, terms, taxonomy, navigation, pagination, counting
+Ordered by adding
+
+| | |
+| ------------ | ------------- |
+| Complexity | -> O(1) |
+| Features | order, offset, limit, selection types: single [tag1], intersect [tag1,tag2], intersect by group [tag1,tag2,tag3+tag4], exclude [tag1,tag2,^tag3] |
+| Latency | <1 ms with get 100 values, in any place of index |
+| Memory usage | 4MB per 1,000,000 values, 4 bytes/entry |
+| Write (Data+Hash+Tags) | 65,000 r/s |
+| Use cases | tags, terms, taxonomy, navigation, pagination, counting |
+
 * Tree
-	Custom ordering by value (0-4294967295)
-	Complexity: -> O(1)
-	Features: order, min/max-range, limit
-	Latency: <1 ms with get 100 values, in any place of index
-	Memory usage: 8MB per 1,000,000 values, 8 bytes/entry
-	Write (Data+Hash+Tags+Tree): 55,000 r/s
-	Use cases: sorting data, price, quantity, counting by range
+Custom ordering by value (0-4294967295)
+
+| | |
+| ------------ | ------------- |
+| Complexity | -> O(1) |
+| Features | order, min/max-range, limit |
+| Latency | <1 ms with get 100 values, in any place of index |
+| Memory usage | 8MB per 1,000,000 values, 8 bytes/entry |
+| Write (Data+Hash+Tags+Tree) | 55,000 r/s |
+| Use cases | sorting data, price, quantity, counting by range |
+
 * Full
-	Full-text search inverted index
-	Complexity: -> O(1)
-	Features: splitting text by words on Set, maximum word length 8 symbols
-	Latency: <1 ms with get 100 values, in any place of index
-	Memory usage: 6MB per 1,000,000 values, 6 bytes/entry
-	Write (Data+Hash+Tags+Tree+Full): 35,000 r/s
-	Use cases: text search
+Full-text search inverted index
+
+| | |
+| ------------ | ------------- |
+| Complexity | -> O(1) |
+| Features | splitting text by words on Set, maximum word length 8 symbols |
+| Latency | <1 ms with get 100 values, in any place of index |
+| Memory usage | 6MB per 1,000,000 values, 6 bytes/entry |
+| Write (Data+Hash+Tags+Tree+Full) | 35,000 r/s |
+| Use cases | text search |
+
 * Sum
-	Memory usage: 10MB+ per 1,000,000 values, 10+ bytes/entry, instance - depends of requests
+
+| | |
+| ------------ | ------------- |
+| Memory usage | 10MB+ per 1,000,000 values, 10+ bytes/entry, instance - depends of requests |
 
 
 Goda DB have read priority (with identical concurrency performance will be X writes and 10*X reads).

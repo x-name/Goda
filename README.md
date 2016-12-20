@@ -57,11 +57,12 @@ POST /index/tags
 {
 	"Tags": ["Tag 1", "Tag 2"],
 	"Range": {
+		"Order": "ASC", /* Optional, default ASC */
 		"Offset": 0,
 		"Limit": 10
-	}
+	},
+	"Memo": 0
 }
-
 ```
 
 ### Tree

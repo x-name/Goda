@@ -194,6 +194,7 @@ You can add here anything data associated with Data ID, this field fine for inde
 	2. Modify file "data/indexname/.dictionary" (RESTART REQUIRED).
 	3. One stroke - one entry. Be careful with spaces and other symbols, this data will used without modification.
 - Performance with 100 elements dictionary.
+
 	| | |
 	| ------------ | ------------- |
 	| Compress | 180,000 r/s |

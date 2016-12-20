@@ -6,9 +6,10 @@
 On disc data storage
 
 | | |
+| ------------ | ------------- |
 | Complexity | -> O(1) |
 | Features | set, get by id |
-| Latency | <1 ms with get 100 values, in any place of index |
+| Latency (random) | <1 ms with get 100 values |
 | Memory usage | 8MB per 1,000,000 values, 8 bytes/entry |
 | Write (Data) | 80,000 r/s |
 | Read (random) | 70,000 r/s |
@@ -16,6 +17,7 @@ On disc data storage
 | Use cases | storing data |
 
 * Memo
+
 Like Data type, but in-memory
 Complexity: -> O(1)
 Features: selecting Tree/Tags without Data field, custom dictionary for compression (30-60%)
@@ -24,6 +26,7 @@ Memory overhead: 35/60MB per 1,000,000 values, 35/60 bytes/entry
 Write: 150,000 r/s
 Read: 200,000 r/s
 Use cases: storing meta/properties data, fastest selection
+
 * Hash
 	Key-Value storage with in-memory index and disc data storage
 	Complexity: -> O(1)

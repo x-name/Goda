@@ -18,15 +18,9 @@ import (
 	"bufio"
 	//"fmt"
 	"os"
-<<<<<<< HEAD
 	//"sync"
-=======
 	"sync"
 	//"sync/atomic"
-<<<<<<< HEAD
->>>>>>> parent of 8e4797d... clearing
-=======
->>>>>>> parent of 8e4797d... clearing
 )
 
 //var bDelimeter []byte = []byte{0x00, 0xBC}
@@ -41,7 +35,7 @@ var b4null []byte = []byte{0x00, 0x00, 0x00, 0x00}
 
 var writeBuffer map[string][]byte
 
-//var mutex = &sync.RWMutex{}
+var mutex = &sync.RWMutex{}
 var lastWriterFile *os.File
 var lastWriterFileName string
 
@@ -71,16 +65,10 @@ func Writer() {
 	//mutex.Unlock()
 }
 func WriteAppend(fileName string, b []byte) bool {
-<<<<<<< HEAD
-<<<<<<< HEAD
 	//mutex.Lock()
-=======
-=======
->>>>>>> parent of 8e4797d... clearing
 	//bLen := len(b)
 
 	mutex.Lock()
->>>>>>> parent of 8e4797d... clearing
 	if writeBuffer == nil {
 		// writeBuffer = make(map[string][]byte), WriteBufferFiles) // BAD, slower (go1.7, windows/amd64)
 		writeBuffer = make(map[string][]byte)
@@ -130,7 +118,7 @@ func WriteAppend(fileName string, b []byte) bool {
 
 var writerTruncateBuffer map[string][]byte = make(map[string][]byte)
 
-//var mutexWriterTruncate = &sync.RWMutex{}
+var mutexWriterTruncate = &sync.RWMutex{}
 var lastWriterTruncateFile *os.File
 var lastWriterTruncateFileName string
 
@@ -159,9 +147,7 @@ func WriterTruncate() {
 	//mutexWriterTruncate.Unlock()
 }
 func WriteTruncate(fileName string, b []byte) bool {
-<<<<<<< HEAD
 	//mutexWriterTruncate.Lock()
-=======
 	mutexWriterTruncate.Lock()
 	//if writerTruncateBuffer == nil {
 	//	writerTruncateBuffer
@@ -169,11 +155,6 @@ func WriteTruncate(fileName string, b []byte) bool {
 	//if writerTruncateBuffer[fileName] == nil {
 	//	writerTruncateBuffer[fileName] = []byte{}
 	//}
-
-<<<<<<< HEAD
->>>>>>> parent of 8e4797d... clearing
-=======
->>>>>>> parent of 8e4797d... clearing
 	writerTruncateBuffer[fileName] = b
 	//mutexWriterTruncate.Unlock()
 

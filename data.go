@@ -1,18 +1,13 @@
 package main
 
 import (
-	//"bytes"
-	"log"
-	"os"
-	"strconv"
-	//"sync"
-	//"reflect"
-	//"github.com/emirpasic/gods/maps/treemap"
 	"bytes"
 	"encoding/gob"
 	"errors"
+	"log"
 	"math"
-	//"sync"
+	"os"
+	"strconv"
 	"time"
 )
 
@@ -104,8 +99,6 @@ func (index *Index) Set(value Value) ([]byte, error) {
 		}
 	}
 
-	//return false
-
 	for _, k := range value.Hash {
 		if !index.HashAdd([]byte(k), key) {
 			// Collision
@@ -115,24 +108,11 @@ func (index *Index) Set(value Value) ([]byte, error) {
 	for k, v := range value.Tree {
 		kByte := []byte(k)[:8]
 		indexTreeMapName := byteToByte8(kByte)
-		//kString := string(kByte)
-		//if index.Tree[kString] == nil {
-		//	index.Tree[k] = treemap.NewWithIntComparator()
-		//}
 		var bHash []byte = append(kByte, bDelimeter2...)
 		bHash = append(bHash, uInt64Byte8(uint64(v))...)
 		bHash = append(bHash, bDelimeter2...)
 		bHash = append(bHash, key...)
 		index.TreeIndex.SetRaw(bHash, 0)
-		// overflow
-		/*
-			var bHash []byte = append(kByte, bDelimeter2...)
-			bHash = append(bHash, uInt64Byte8(uint64(v))...)
-			bHash = append(bHash, bDelimeter2...)
-			bHash = append(bHash, key...)
-			index.TreeIndex.SetRaw(bHash, 0)
-		*/
-		//index.Tree[k].Put(v, Escape(key))
 
 		index.BitmapAdd([]byte("o/"+k), uint32(v))
 
@@ -156,16 +136,6 @@ func (index *Index) Set(value Value) ([]byte, error) {
 
 	for _, s := range value.Full {
 		index.InvertedIndex(key, s)
-	}
-
-	// Data (1KB) + Index + Hash + Tree + Inverted + Bitmaps
-	// Write 55,000 r/s
-	///^ 1,000,000; Memory 50MB(heap?) (after GC 0 heap?) 130-220MB(Alloc?) (after GC 44MB Alloc?) 190-210MB(TotalAlloc?) (after GC RANDOM, 0 TotalAlloc?); Storage 1GB
-	// ^ 10,000,000; Memory 800MB-1.5GB; Storage 11GB; Adding time 4 min
-	// ^ 30,000,000; Memory 2.2GB; Storage 34GB; Load time 1m51s
-
-	if Config.Durability.WAL {
-		WriteTruncate(index.File+"/checkpoint.wal", key)
 	}
 
 	if Config.Replication.Master {
@@ -198,12 +168,8 @@ func (index *Index) Set(value Value) ([]byte, error) {
 	return key, nil
 }
 
-//var concurrency int = 1
-//var sem chan bool = make(chan bool, concurrency)
-
 func (index *Index) SetRaw(d []byte, reserve int) [8]byte {
 	indexN := index.N
-	//index.IndexIndex.SegN++
 	index.SegN++
 	for index.SegN-(indexN*index.SegL-index.SegL) > index.SegL {
 		indexN++
@@ -237,43 +203,14 @@ func (index *Index) SetRaw(d []byte, reserve int) [8]byte {
 	data := append(bDelimeter, append(size, d...)...)
 
 	WriteAppend(index.File+"/.storage/"+strconv.Itoa(indexN), data)
-	/*
-		sem <- true
-		go func(index *Index, indexN int, data []byte) {
-			defer func() { <-sem }()
-			WriteAppend(index.File+"/.storage/"+strconv.Itoa(indexN), data)
-		}(index, indexN, data)
-	*/
 
 	var bKey [8]byte
-	//bKey = append(bKey, uInt32Byte4(uint32(indexN))...)
-	//bKey = append(bKey, ...)
 	bKeyA := append(uInt32Byte4(uint32(index.FileOffset+uint32(len(bDelimeter)))), uInt32Byte4(uint32(len(data)-len(bDelimeter)))...)
 	copy(bKey[:], bKeyA[:8])
 
 	index.FileOffset += uint32(len(data))
 
-	//bKey = append(bKey, []byte(index.Name)...)
-	/*
-		bKey = append(bKey, uInt32Byte4(uint32(indexN))...)
-		bKey = append(bKey, uInt32Byte4(uint32(stat.Size()+int64(len(bDelimeter))))...)
-		bKey = append(bKey, uInt32Byte4(uint32(len(data)-len(bDelimeter)))...)
-		bKey = append(bKey, []byte(index.Name)...)
-	*/
-
-	/*
-			if _, err = index.FileOpen.Write(data); err != nil {
-				log.Fatal(err)
-			}
-		var configUpdate []byte =
-		if _, err = index.Config.WriteAt(configUpdate, 0); err != nil {
-			log.Fatal(err)
-		}
-	*/
-
 	WriteTruncate(index.File+"/.config", []byte(strconv.Itoa(index.SegN)+"\n"+strconv.Itoa(index.SegL)))
-
-	//log.Println(bKey)
 
 	return bKey
 }
@@ -301,24 +238,10 @@ func (index *Index) GetRaw(id uint32) []byte {
 			log.Println(err)
 		}
 	}
-	//log.Panic(index.Index[:100])
 	b := make([]byte, byte4UInt32(k[4:8]))
 	if _, err = lastReadFile.ReadAt(b, int64(byte4UInt32(k[0:4]))); err != nil {
 		//log.Fatal(err)
 	}
-	/*
-		bSplit := bytes.Split(b, bDelimeter)
-		if len(bSplit) == 2 {
-			b = bSplit[1]
-		} else {
-			log.Println("Bad Storage-file split")
-			//log.Println(b)
-			//log.Println(bSplit)
-			//rBytes = Decode(b[4:])
-			return rBytes
-		}
-	*/
-	//log.Println(byte4UInt32(b[0:4])) // Size
 	if len(b) > 4 {
 		if byte4UInt32(b[0:4]) == uint32(len(b[4:])) {
 			if Config.Storage.Compress {
@@ -326,13 +249,10 @@ func (index *Index) GetRaw(id uint32) []byte {
 			} else {
 				rBytes = b[4:]
 			}
-			//log.Println(string(rBytes))
 		} else {
-			//log.Println("Bad Storage-file segment")
 			return rBytes
 		}
 	} else {
-		//log.Println("Bad OMG Storage-file segment", b, k, index.Index[id])
 		return rBytes
 	}
 
@@ -367,8 +287,6 @@ func (index *Index) UpdateRaw(k []byte, d []byte) []byte {
 		d = Encode(d)
 	}
 	if size >= uint32(len(d)) {
-		//log.Println("Add new version (Encoded): " + strconv.Itoa(int(len(d))) + " bytes; Available size: " + strconv.Itoa(int(size)) + " bytes")
-
 		if lastUpdateFileN != indexNuint64 {
 			lastUpdateFileN = indexNuint64
 			lastUpdateFile, err = os.OpenFile(index.File+"/.storage/"+indexN, os.O_WRONLY, 0600)
@@ -392,13 +310,11 @@ func (index *Index) UpdateRaw(k []byte, d []byte) []byte {
 	}
 
 	if byte4UInt32(b[0:4]) == uint32(len(b[4:])) {
-		//log.Println(b)
-		//rBytes = Decode(b[4:])
+
 	} else {
 		log.Println("Bad Storage-file segment")
 		return rBytes
 	}
-	//log.Println(string(rBytes))
 
 	return rBytes
 }

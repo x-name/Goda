@@ -420,8 +420,11 @@ func (index *Index) GetIndexCross(tags [][]byte, offset int, limit int, reverse 
 	}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 	max := uint32(treeIntersection.GetCardinality()) - 1
 =======
+=======
+>>>>>>> parent of 8e4797d... clearing
 	//log.Println(treeIntersection.GetCardinality())
 
 	max := uint32(treeIntersection.GetCardinality()) //- 1

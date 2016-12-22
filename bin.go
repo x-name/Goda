@@ -23,6 +23,9 @@ import (
 =======
 	"sync"
 	//"sync/atomic"
+<<<<<<< HEAD
+>>>>>>> parent of 8e4797d... clearing
+=======
 >>>>>>> parent of 8e4797d... clearing
 )
 
@@ -69,8 +72,11 @@ func Writer() {
 }
 func WriteAppend(fileName string, b []byte) bool {
 <<<<<<< HEAD
+<<<<<<< HEAD
 	//mutex.Lock()
 =======
+=======
+>>>>>>> parent of 8e4797d... clearing
 	//bLen := len(b)
 
 	mutex.Lock()
@@ -164,6 +170,9 @@ func WriteTruncate(fileName string, b []byte) bool {
 	//	writerTruncateBuffer[fileName] = []byte{}
 	//}
 
+<<<<<<< HEAD
+>>>>>>> parent of 8e4797d... clearing
+=======
 >>>>>>> parent of 8e4797d... clearing
 	writerTruncateBuffer[fileName] = b
 	//mutexWriterTruncate.Unlock()

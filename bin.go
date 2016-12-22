@@ -16,21 +16,13 @@ import (
 	"github.com/kjk/smaz"
 
 	"bufio"
-	//"fmt"
 	"os"
 	"sync"
-	//"sync/atomic"
 )
-
-//var bDelimeter []byte = []byte{0x00, 0xBC}
 
 var bDelimeter []byte = []byte{0x00, 0x00, 0x00, 0x00, 0xBC, 0xBC, 0xBC, 0xBC}
 var bDelimeter2 []byte = []byte{0x00, 0x00, 0x01, 0x01, 0xBC, 0xBC}
 var b4null []byte = []byte{0x00, 0x00, 0x00, 0x00}
-
-//var WriteBufferFiles = 100
-//var WriteBufferLength = 1024 * 10240 // 1MB+
-//var WriteBufferWaiting = time.Duration(10)
 
 var writeBuffer map[string][]byte
 var mutex = &sync.RWMutex{}
@@ -53,7 +45,6 @@ func Writer() {
 
 		w.Write(writeBuffer[fileName])
 		delete(writeBuffer, fileName)
-		//writeBuffer[fileName] = nil
 
 		err = w.Flush()
 		if err != nil {
@@ -63,8 +54,6 @@ func Writer() {
 	mutex.Unlock()
 }
 func WriteAppend(fileName string, b []byte) bool {
-	//bLen := len(b)
-
 	mutex.Lock()
 	if writeBuffer == nil {
 		// writeBuffer = make(map[string][]byte), WriteBufferFiles) // BAD, slower (go1.7, windows/amd64)
@@ -144,13 +133,6 @@ func WriterTruncate() {
 }
 func WriteTruncate(fileName string, b []byte) bool {
 	mutexWriterTruncate.Lock()
-	//if writerTruncateBuffer == nil {
-	//	writerTruncateBuffer
-	//}
-	//if writerTruncateBuffer[fileName] == nil {
-	//	writerTruncateBuffer[fileName] = []byte{}
-	//}
-
 	writerTruncateBuffer[fileName] = b
 	mutexWriterTruncate.Unlock()
 
@@ -163,8 +145,6 @@ func Decode(buff []byte) []byte {
 	buff = buff[1:]
 	if method == 0x01 {
 		r, err := smaz.Decode(nil, buff)
-		//log.Println("Decode:")
-		//log.Println(buff)
 		if err != nil {
 			log.Println(err)
 		}
@@ -183,11 +163,8 @@ func Decode(buff []byte) []byte {
 }
 func Encode(buff []byte) []byte {
 	//return buff
-	//l := len(buff)
 	if true {
 		r := append([]byte{0x01}, smaz.Encode(nil, buff)...)
-		//log.Println("Encode:")
-		//log.Println(r)
 		return r
 	} else {
 		var b bytes.Buffer
@@ -281,7 +258,6 @@ type Stat struct {
 }
 
 /*
-var godaStat Stat
 godaStat = StatStart()
 godaStat = StatEnd(godaStat, "FuncName", 10000000)
 */

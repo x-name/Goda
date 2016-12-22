@@ -17,7 +17,7 @@ import (
 
 	"bufio"
 	"os"
-	"sync"
+	//"sync"
 )
 
 var bDelimeter []byte = []byte{0x00, 0x00, 0x00, 0x00, 0xBC, 0xBC, 0xBC, 0xBC}
@@ -25,13 +25,14 @@ var bDelimeter2 []byte = []byte{0x00, 0x00, 0x01, 0x01, 0xBC, 0xBC}
 var b4null []byte = []byte{0x00, 0x00, 0x00, 0x00}
 
 var writeBuffer map[string][]byte
-var mutex = &sync.RWMutex{}
+
+//var mutex = &sync.RWMutex{}
 var lastWriterFile *os.File
 var lastWriterFileName string
 
 func Writer() {
 	var err error
-	mutex.Lock()
+	//mutex.Lock()
 	for fileName := range writeBuffer {
 		if lastWriterFile == nil || lastWriterFileName != fileName {
 			lastWriterFileName = fileName
@@ -51,10 +52,10 @@ func Writer() {
 			log.Println(err)
 		}
 	}
-	mutex.Unlock()
+	//mutex.Unlock()
 }
 func WriteAppend(fileName string, b []byte) bool {
-	mutex.Lock()
+	//mutex.Lock()
 	if writeBuffer == nil {
 		// writeBuffer = make(map[string][]byte), WriteBufferFiles) // BAD, slower (go1.7, windows/amd64)
 		writeBuffer = make(map[string][]byte)
@@ -97,19 +98,20 @@ func WriteAppend(fileName string, b []byte) bool {
 	*/
 
 	writeBuffer[fileName] = append(writeBuffer[fileName], b...)
-	mutex.Unlock()
+	//mutex.Unlock()
 
 	return true
 }
 
 var writerTruncateBuffer map[string][]byte = make(map[string][]byte)
-var mutexWriterTruncate = &sync.RWMutex{}
+
+//var mutexWriterTruncate = &sync.RWMutex{}
 var lastWriterTruncateFile *os.File
 var lastWriterTruncateFileName string
 
 func WriterTruncate() {
 	var err error
-	mutexWriterTruncate.Lock()
+	//mutexWriterTruncate.Lock()
 	for fileName := range writerTruncateBuffer {
 		if lastWriterTruncateFileName != fileName {
 			lastWriterTruncateFileName = fileName
@@ -129,12 +131,12 @@ func WriterTruncate() {
 			delete(writerTruncateBuffer, fileName)
 		}
 	}
-	mutexWriterTruncate.Unlock()
+	//mutexWriterTruncate.Unlock()
 }
 func WriteTruncate(fileName string, b []byte) bool {
-	mutexWriterTruncate.Lock()
+	//mutexWriterTruncate.Lock()
 	writerTruncateBuffer[fileName] = b
-	mutexWriterTruncate.Unlock()
+	//mutexWriterTruncate.Unlock()
 
 	return true
 }

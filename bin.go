@@ -18,9 +18,13 @@ import (
 	"bufio"
 	//"fmt"
 	"os"
+<<<<<<< HEAD
 	//"sync"
 	"sync"
 	//"sync/atomic"
+=======
+	"sync"
+>>>>>>> parent of 0136da4... tags limit bugfix
 )
 
 //var bDelimeter []byte = []byte{0x00, 0xBC}
@@ -34,14 +38,17 @@ var b4null []byte = []byte{0x00, 0x00, 0x00, 0x00}
 //var WriteBufferWaiting = time.Duration(10)
 
 var writeBuffer map[string][]byte
+<<<<<<< HEAD
 
+=======
+>>>>>>> parent of 0136da4... tags limit bugfix
 var mutex = &sync.RWMutex{}
 var lastWriterFile *os.File
 var lastWriterFileName string
 
 func Writer() {
 	var err error
-	//mutex.Lock()
+	mutex.Lock()
 	for fileName := range writeBuffer {
 		if lastWriterFile == nil || lastWriterFileName != fileName {
 			lastWriterFileName = fileName
@@ -62,12 +69,15 @@ func Writer() {
 			log.Println(err)
 		}
 	}
-	//mutex.Unlock()
+	mutex.Unlock()
 }
 func WriteAppend(fileName string, b []byte) bool {
+<<<<<<< HEAD
 	//mutex.Lock()
 	//bLen := len(b)
 
+=======
+>>>>>>> parent of 0136da4... tags limit bugfix
 	mutex.Lock()
 	if writeBuffer == nil {
 		// writeBuffer = make(map[string][]byte), WriteBufferFiles) // BAD, slower (go1.7, windows/amd64)
@@ -111,20 +121,23 @@ func WriteAppend(fileName string, b []byte) bool {
 	*/
 
 	writeBuffer[fileName] = append(writeBuffer[fileName], b...)
-	//mutex.Unlock()
+	mutex.Unlock()
 
 	return true
 }
 
 var writerTruncateBuffer map[string][]byte = make(map[string][]byte)
+<<<<<<< HEAD
 
+=======
+>>>>>>> parent of 0136da4... tags limit bugfix
 var mutexWriterTruncate = &sync.RWMutex{}
 var lastWriterTruncateFile *os.File
 var lastWriterTruncateFileName string
 
 func WriterTruncate() {
 	var err error
-	//mutexWriterTruncate.Lock()
+	mutexWriterTruncate.Lock()
 	for fileName := range writerTruncateBuffer {
 		if lastWriterTruncateFileName != fileName {
 			lastWriterTruncateFileName = fileName
@@ -144,9 +157,10 @@ func WriterTruncate() {
 			delete(writerTruncateBuffer, fileName)
 		}
 	}
-	//mutexWriterTruncate.Unlock()
+	mutexWriterTruncate.Unlock()
 }
 func WriteTruncate(fileName string, b []byte) bool {
+<<<<<<< HEAD
 	//mutexWriterTruncate.Lock()
 	mutexWriterTruncate.Lock()
 	//if writerTruncateBuffer == nil {
@@ -155,8 +169,11 @@ func WriteTruncate(fileName string, b []byte) bool {
 	//if writerTruncateBuffer[fileName] == nil {
 	//	writerTruncateBuffer[fileName] = []byte{}
 	//}
+=======
+	mutexWriterTruncate.Lock()
+>>>>>>> parent of 0136da4... tags limit bugfix
 	writerTruncateBuffer[fileName] = b
-	//mutexWriterTruncate.Unlock()
+	mutexWriterTruncate.Unlock()
 
 	return true
 }

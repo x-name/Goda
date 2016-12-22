@@ -225,9 +225,7 @@ func (index *Index) GetRaw(id uint32) []byte {
 	var err error
 
 	if id >= uint32(len(index.Index)) {
-		if Config.Debug.Log {
-			log.Println("GetRaw: Index out of range")
-		}
+		log.Println("GetRaw: Index out of range")
 		return rBytes
 	}
 	k := index.Index[id]

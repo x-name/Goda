@@ -280,14 +280,13 @@ func (index *Index) GetIndex(tag []byte, offset int, limit int, reverse bool, me
 	}
 	//log.Println(tree.GetCardinality())
 
-	max := uint32(tree.GetCardinality()) - 1
+	max := uint32(tree.GetCardinality()) //- 1
 	TagsSortRes.Size = max
 	if reverse {
 		for i := max - uint32(offset); i > uint32(0) && limiter < limit; i-- {
 			v, _ := tree.Select(uint32(i))
 			if v == 0 {
-				//log.Println("continue", i, max)
-				break
+				continue
 			}
 			if memo == 0 {
 				//TagsSortRes.Results[uint32(v)] = index.GetRaw(v)
@@ -419,17 +418,20 @@ func (index *Index) GetIndexCross(tags [][]byte, offset int, limit int, reverse 
 		}
 	}
 
+<<<<<<< HEAD
 	max := uint32(treeIntersection.GetCardinality()) - 1
 	//log.Println(treeIntersection.GetCardinality())
 
 	//max := uint32(treeIntersection.GetCardinality()) //- 1
+=======
+	max := uint32(treeIntersection.GetCardinality()) //- 1
+>>>>>>> parent of 0136da4... tags limit bugfix
 	TagsSortRes.Size = max
 	if reverse {
 		for i := max - uint32(offset); i > uint32(0) && limiter < limit; i-- {
 			v, _ := treeIntersection.Select(uint32(i))
 			if v == 0 {
-				//log.Println("continue", i, max)
-				break
+				continue
 			}
 			if memo == 0 {
 				//TagsSortRes.Results[uint32(v)] = index.GetRaw(v)

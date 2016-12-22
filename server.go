@@ -27,14 +27,35 @@ type WAL struct {
 	IndexName string
 }
 
-func HandleAPI(ctx *fasthttp.RequestCtx) {
+//var mutexAPI = &sync.RWMutex{}
+
+func (h *Handler) HandleAPI(ctx *fasthttp.RequestCtx) {
+	//func HandleAPI(w http.ResponseWriter, r *http.Request) {
+	//ctx.SetConnectionClose()
+	/*
+	 */
+	/*
+		b, err := ioutil.ReadAll(r.Body)
+		r.Body.Close()
+		if err != nil {
+			log.Println("Error read body:", err)
+			return
+		}
+		reqJson := string(b)
+	*/
 	reqJson := string(ctx.PostBody())
 
 	Req := strings.Split(string(ctx.Path()), "/")
+	//Req := strings.Split(string(r.URL.Path), "/")
 	if len(Req) < 3 {
 		return
 	}
 	apiName := Req[2]
+	/*
+		if apiName != "set" {
+			log.Println(string(r.URL.Path))
+		}
+	*/
 
 	index := indexes[Req[1]]
 
@@ -49,18 +70,33 @@ func HandleAPI(ctx *fasthttp.RequestCtx) {
 
 	switch string(apiName) {
 	case "set":
+		//mutexAPI.Lock()
 		fmt.Fprintf(ctx, index.SetJson(reqJson))
+		//log.Println("set")
 		return
+		//mutexAPI.Unlock()
 	case "get":
+		//mutexAPI.Lock()
 		fmt.Fprintf(ctx, index.GetJson(reqJson))
+		//log.Println("get")
 		return
+		//mutexAPI.Unlock()
 	case "tags":
+		//mutexAPI.Lock()\
+		//x := index.TagsSortJson(reqJson)
 		fmt.Fprintf(ctx, index.TagsSortJson(reqJson))
+		//log.Println("tags")
 		return
+		//mutexAPI.Unlock()
 	case "tree":
+		//log.Println("tree")
+		//mutexAPI.Lock()
 		fmt.Fprintf(ctx, index.TreeSortJson(reqJson))
 		return
+		//mutexAPI.Unlock()
 	case "cache":
+		//log.Println("tree")
+		//mutexAPI.Lock()
 		if len(Req) != 4 {
 			return
 		}
@@ -70,14 +106,22 @@ func HandleAPI(ctx *fasthttp.RequestCtx) {
 			fmt.Fprintf(ctx, index.CacheSetJson(reqJson))
 		}
 		return
+		//mutexAPI.Unlock()
 	default:
 
 		return
 	}
 	return
+
+	//ctx.SetStatusCode(fasthttp.StatusOK)
+	//fmt.Fprintf(ctx, "Hello, world! Requested path is %q. Foobar is %q", ctx.Path(), h.foobar)
 }
 
-func HandleStatus(ctx *fasthttp.RequestCtx) {
+func (h *Handler) HandleStatus(ctx *fasthttp.RequestCtx) {
+	//func HandleStatus(w http.ResponseWriter, r *http.Request) {
+	//ctx.SetConnectionClose()
+	//ctx.SetContentType("text/html")
+
 	var Memory runtime.MemStats
 	runtime.ReadMemStats(&Memory)
 	fmt.Fprint(ctx, `<html><head>
@@ -86,7 +130,8 @@ func HandleStatus(ctx *fasthttp.RequestCtx) {
 	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script>
 
-	</head><body>`)
+
+		</head><body>`)
 
 	requestStat := `<br>Set: ` + strconv.Itoa(StatCounter.SetCounter) + ` req/sec<br>Get: ` + strconv.Itoa(StatCounter.GetCounter) + ` req/sec`
 	indexesString := `<table style="width: 300px">`
@@ -146,17 +191,17 @@ $('.button-ajax-send').click(function(e){
 		</body></html>`)
 }
 
-func HandleStop(ctx *fasthttp.RequestCtx) {
+func (h *Handler) HandleStop(ctx *fasthttp.RequestCtx) {
 	ctx.SetConnectionClose()
 	Stop()
 }
-func HandleFreeMemory(ctx *fasthttp.RequestCtx) {
+func (h *Handler) HandleFreeMemory(ctx *fasthttp.RequestCtx) {
 	ctx.SetConnectionClose()
 	FreeMemory()
 	log.Println("FreeMemory()")
 }
 
-func HandleStreamer(ctx *fasthttp.RequestCtx) {
+func (h *Handler) HandleStreamer(ctx *fasthttp.RequestCtx) {
 	ctx.SetConnectionClose()
 
 }
@@ -201,6 +246,39 @@ func Streamer(replica string, wals []WAL) {
 	w.Write(d)
 	w.Close()
 	d = b.Bytes()
+	/*
+		log.Println(`Sended:`, FormatSize(uint64(len(d))))
+
+		c := &fasthttp.HostClient{
+			Addr: replica,
+		}
+
+		req := &fasthttp.Request{}
+		res := &fasthttp.Response{}
+		//req := AcquireRequest()
+		//replica = "http://" + replica + "/receiver"
+		//log.Println(replica)
+		//req.SetRequestURI("/receiver")
+		//req.SetHost("127.0.0.1:6677")
+		req.Header.SetHost(replica)
+		req.Header.SetRequestURI("/receiver")
+		req.Header.SetMethod("POST")
+		req.SetBody(d)
+
+		err := c.Do(req, res)
+		if err != nil {
+			//log.Println(req.String())
+			log.Fatalf("Error when loading: %s", err)
+		}
+		res.Reset()
+		req.Reset()
+		res.ResetBody()
+		req.ResetBody()
+		fasthttp.ReleaseResponse(res)
+		fasthttp.ReleaseRequest(req)
+		FreeMemory()
+		//log.Println(res.Body)
+	*/
 
 	url := "http://" + replica + "/.receiver"
 
@@ -228,7 +306,7 @@ func Streamer(replica string, wals []WAL) {
 		log.Println(string(body))
 	}
 }
-func HandleReceiver(ctx *fasthttp.RequestCtx) {
+func (h *Handler) HandleReceiver(ctx *fasthttp.RequestCtx) {
 	d := ctx.PostBody()
 	//log.Println(`Received:`, FormatSize(uint64(len(d))))
 
@@ -279,26 +357,47 @@ func HandleReceiver(ctx *fasthttp.RequestCtx) {
 }
 
 func Server() {
+	/*
+		srv := &http.Server{
+			ReadTimeout:  5 * time.Second,
+			WriteTimeout: 10 * time.Second,
+			Addr:         "127.0.0.1:6677",
+			Transport: &http.Transport{
+				DisableKeepAlives: true,
+			},
+		}
+	*/
+
+	/*
+		http.HandleFunc("/", HandleAPI)
+		http.HandleFunc("/.status", HandleStatus)
+		http.ListenAndServe(Config.Storage.Listen, nil)
+
+	*/
+	handler := &Handler{
+		foobar: "foobar",
+	}
+
 	m := func(ctx *fasthttp.RequestCtx) {
 		switch string(ctx.Path()) {
 		case "/":
-			HandleAPI(ctx)
+			handler.HandleAPI(ctx)
 		case "/.status":
-			HandleStatus(ctx)
+			handler.HandleStatus(ctx)
 		case "/.stop":
-			HandleStop(ctx)
+			handler.HandleStop(ctx)
 		case "/.free":
-			HandleFreeMemory(ctx)
+			handler.HandleFreeMemory(ctx)
 		case "/.streamer":
 			if Config.Replication.Master {
-				HandleStreamer(ctx)
+				handler.HandleStreamer(ctx)
 			}
 		case "/.receiver":
 			if Config.Replication.Slave {
-				HandleReceiver(ctx)
+				handler.HandleReceiver(ctx)
 			}
 		default:
-			HandleAPI(ctx)
+			handler.HandleAPI(ctx)
 		}
 	}
 	s := &fasthttp.Server{

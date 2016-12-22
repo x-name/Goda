@@ -1,24 +1,31 @@
 package main
 
 import (
-	//"bufio"
 	"bytes"
-	"encoding/binary"
-	//"encoding/gob"
 	"github.com/RoaringBitmap/roaring"
 	"log"
-	"math"
+	//"math/rand"
+	"bufio"
+	"encoding/gob"
 	"os"
+	//"sync"
+	//"time"
+	"encoding/binary"
+	"math"
+	//"runtime"
 	"strconv"
+	//"time"
 )
 
-/*
+//var bitmapMutex = &sync.RWMutex{}
 var bitmapSaved = false
+
 func (index *Index) BitmapWriter() {
 	return
 	if !bitmapSaved {
 		var buf bytes.Buffer
 
+		//bitmapMutex.Lock()
 
 		enc := gob.NewEncoder(&buf)
 		err := enc.Encode(index.IndexBitmap)
@@ -37,9 +44,9 @@ func (index *Index) BitmapWriter() {
 
 		bitmapSaved = true
 
+		//bitmapMutex.Unlock()
 	}
 }
-*/
 func (index *Index) BitmapAdd(name []byte, val uint32) {
 	var key [8]byte = byteToByte8(name[:8])
 
@@ -97,14 +104,21 @@ func (index *Index) LoadBitmap() bool {
 				continue
 			}
 
+			//log.Println(string(v[8:]))
+			//log.Println(byte4UInt32(v[4:8]))
 			val := byte4UInt32(v[4:8])
 			name := []byte(string(v[8:]))
+			//log.Println(name)
 			var key [8]byte = byteToByte8(name[:8])
 
 			index.BitmapOpen(name)
 
+			//bitmapSaved = false
 			index.IndexBitmap[key].Add(val)
+
+			//index.BitmapIndex.SetRaw(append(uInt32Byte4(val), name...), 0)
 		}
+		//log.Panic(len(strokes))
 		if Config.Performance.FreeMemoryOnLoading {
 			FreeMemory()
 		}

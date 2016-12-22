@@ -436,9 +436,6 @@ WantedBy=multi-user.target
 ### What may be soon?
 Thinking about: Raft, Master/Master, Sharding, Split-brain, Failover.
 
-### Changelog
-0.1 / 20.12.2016 / initial GitHub release
-
 ### Tasks
 - [ ] Time Series DB layer
 	- Tree with time range for counting Tags by time (ID alias with timestamp)

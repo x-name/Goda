@@ -1,7 +1,7 @@
 # Goda DB
 *One use case - one algorithm*
 
-High-performance low-latency time database with strong principles and predictable execution time.
+High-performance low-latency database with strong principles and predictable execution time.
 
 ## Data types
 All data types strongly limited by functionality for using only effective way paradigms.

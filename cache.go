@@ -3,16 +3,16 @@ package main
 import (
 	"errors"
 	"hash/fnv"
-	"sync"
+	//"sync"
 	"time"
 )
 
-var mutexCache = &sync.RWMutex{}
+//var mutexCache = &sync.RWMutex{}
 
 func (index Index) CacheGet(key string) (string, error) {
-	mutexCache.RLock()
+	//mutexCache.RLock()
 	r := index.Cache[cacheKeyHash(key)]
-	mutexCache.RUnlock()
+	//mutexCache.RUnlock()
 	if r.Val == "" {
 		return "", errors.New("Cache: Value with this key not found.")
 	} else {
@@ -24,7 +24,7 @@ func (index Index) CacheGet(key string) (string, error) {
 	}
 }
 func (index Index) CacheSet(key string, val string, expire int) bool {
-	mutexCache.Lock()
+	//mutexCache.Lock()
 	index.Cache[cacheKeyHash(key)] = struct {
 		Val    string
 		Expire int
@@ -32,7 +32,7 @@ func (index Index) CacheSet(key string, val string, expire int) bool {
 		val,
 		int(time.Now().Unix()) + expire,
 	}
-	mutexCache.Unlock()
+	//mutexCache.Unlock()
 	return true
 }
 

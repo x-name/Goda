@@ -17,18 +17,7 @@ import (
 
 	"bufio"
 	"os"
-	//"sync"
-<<<<<<< HEAD
-<<<<<<< HEAD
 	"sync"
-	//"sync/atomic"
-=======
-	"sync"
->>>>>>> parent of 0136da4... tags limit bugfix
-=======
->>>>>>> parent of cf040d8... Revert "clearing"
-=======
->>>>>>> parent of cf040d8... Revert "clearing"
 )
 
 var bDelimeter []byte = []byte{0x00, 0x00, 0x00, 0x00, 0xBC, 0xBC, 0xBC, 0xBC}
@@ -36,10 +25,6 @@ var bDelimeter2 []byte = []byte{0x00, 0x00, 0x01, 0x01, 0xBC, 0xBC}
 var b4null []byte = []byte{0x00, 0x00, 0x00, 0x00}
 
 var writeBuffer map[string][]byte
-<<<<<<< HEAD
-
-=======
->>>>>>> parent of 0136da4... tags limit bugfix
 var mutex = &sync.RWMutex{}
 var lastWriterFile *os.File
 var lastWriterFileName string
@@ -69,18 +54,7 @@ func Writer() {
 	mutex.Unlock()
 }
 func WriteAppend(fileName string, b []byte) bool {
-	//mutex.Lock()
-<<<<<<< HEAD
-<<<<<<< HEAD
-	//bLen := len(b)
-
-=======
->>>>>>> parent of 0136da4... tags limit bugfix
 	mutex.Lock()
-=======
->>>>>>> parent of cf040d8... Revert "clearing"
-=======
->>>>>>> parent of cf040d8... Revert "clearing"
 	if writeBuffer == nil {
 		// writeBuffer = make(map[string][]byte), WriteBufferFiles) // BAD, slower (go1.7, windows/amd64)
 		writeBuffer = make(map[string][]byte)
@@ -129,10 +103,6 @@ func WriteAppend(fileName string, b []byte) bool {
 }
 
 var writerTruncateBuffer map[string][]byte = make(map[string][]byte)
-<<<<<<< HEAD
-
-=======
->>>>>>> parent of 0136da4... tags limit bugfix
 var mutexWriterTruncate = &sync.RWMutex{}
 var lastWriterTruncateFile *os.File
 var lastWriterTruncateFileName string
@@ -162,23 +132,7 @@ func WriterTruncate() {
 	mutexWriterTruncate.Unlock()
 }
 func WriteTruncate(fileName string, b []byte) bool {
-	//mutexWriterTruncate.Lock()
-<<<<<<< HEAD
-<<<<<<< HEAD
 	mutexWriterTruncate.Lock()
-	//if writerTruncateBuffer == nil {
-	//	writerTruncateBuffer
-	//}
-	//if writerTruncateBuffer[fileName] == nil {
-	//	writerTruncateBuffer[fileName] = []byte{}
-	//}
-=======
-	mutexWriterTruncate.Lock()
->>>>>>> parent of 0136da4... tags limit bugfix
-=======
->>>>>>> parent of cf040d8... Revert "clearing"
-=======
->>>>>>> parent of cf040d8... Revert "clearing"
 	writerTruncateBuffer[fileName] = b
 	mutexWriterTruncate.Unlock()
 

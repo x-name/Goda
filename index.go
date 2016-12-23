@@ -347,19 +347,6 @@ func (index *Index) GetIndexCross(tags [][]byte, offset int, limit int, reverse 
 	}
 
 	max := uint32(treeIntersection.GetCardinality()) - 1
-<<<<<<< HEAD
-<<<<<<< HEAD
-	//log.Println(treeIntersection.GetCardinality())
-
-	//max := uint32(treeIntersection.GetCardinality()) //- 1
-=======
-	max := uint32(treeIntersection.GetCardinality()) //- 1
->>>>>>> parent of 0136da4... tags limit bugfix
-=======
->>>>>>> parent of cf040d8... Revert "clearing"
-=======
->>>>>>> parent of cf040d8... Revert "clearing"
-	TagsSortRes.Size = max
 	if reverse {
 		for i := max - uint32(offset); i > uint32(0) && limiter < limit; i-- {
 			v, _ := treeIntersection.Select(uint32(i))

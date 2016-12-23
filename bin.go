@@ -19,11 +19,14 @@ import (
 	"os"
 	//"sync"
 <<<<<<< HEAD
+<<<<<<< HEAD
 	"sync"
 	//"sync/atomic"
 =======
 	"sync"
 >>>>>>> parent of 0136da4... tags limit bugfix
+=======
+>>>>>>> parent of cf040d8... Revert "clearing"
 =======
 >>>>>>> parent of cf040d8... Revert "clearing"
 )
@@ -68,11 +71,14 @@ func Writer() {
 func WriteAppend(fileName string, b []byte) bool {
 	//mutex.Lock()
 <<<<<<< HEAD
+<<<<<<< HEAD
 	//bLen := len(b)
 
 =======
 >>>>>>> parent of 0136da4... tags limit bugfix
 	mutex.Lock()
+=======
+>>>>>>> parent of cf040d8... Revert "clearing"
 =======
 >>>>>>> parent of cf040d8... Revert "clearing"
 	if writeBuffer == nil {
@@ -158,6 +164,7 @@ func WriterTruncate() {
 func WriteTruncate(fileName string, b []byte) bool {
 	//mutexWriterTruncate.Lock()
 <<<<<<< HEAD
+<<<<<<< HEAD
 	mutexWriterTruncate.Lock()
 	//if writerTruncateBuffer == nil {
 	//	writerTruncateBuffer
@@ -168,6 +175,8 @@ func WriteTruncate(fileName string, b []byte) bool {
 =======
 	mutexWriterTruncate.Lock()
 >>>>>>> parent of 0136da4... tags limit bugfix
+=======
+>>>>>>> parent of cf040d8... Revert "clearing"
 =======
 >>>>>>> parent of cf040d8... Revert "clearing"
 	writerTruncateBuffer[fileName] = b

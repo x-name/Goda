@@ -216,13 +216,16 @@ func (index *Index) GetIndex(tag []byte, offset int, limit int, reverse bool, me
 		return TagsSortRes
 	}
 
-	max := uint32(tree.GetCardinality()) //- 1
+	max := uint32(tree.GetCardinality()) - 1
 	TagsSortRes.Size = max
 	if reverse {
 		for i := max - uint32(offset); i > uint32(0) && limiter < limit; i-- {
 			v, _ := tree.Select(uint32(i))
 			if v == 0 {
-				continue
+				if Config.Debug.Log {
+					log.Println("GetIndex: break", i, max)
+				}
+				break
 			}
 			if memo == 0 {
 				TagsSortRes.Results[limiter] = TagsSortResult{
@@ -241,7 +244,10 @@ func (index *Index) GetIndex(tag []byte, offset int, limit int, reverse bool, me
 		for i := offset; i < offset+limit; i++ {
 			v, _ := tree.Select(uint32(i))
 			if v == 0 {
-				continue
+				if Config.Debug.Log {
+					log.Println("GetIndex: break", i, max)
+				}
+				break
 			}
 			if memo == 0 {
 				TagsSortRes.Results[limiter] = TagsSortResult{
@@ -347,11 +353,15 @@ func (index *Index) GetIndexCross(tags [][]byte, offset int, limit int, reverse 
 	}
 
 	max := uint32(treeIntersection.GetCardinality()) - 1
+	TagsSortRes.Size = max
 	if reverse {
 		for i := max - uint32(offset); i > uint32(0) && limiter < limit; i-- {
 			v, _ := treeIntersection.Select(uint32(i))
 			if v == 0 {
-				continue
+				if Config.Debug.Log {
+					log.Println("GetIndexCross: break", i, max)
+				}
+				break
 			}
 			if memo == 0 {
 				TagsSortRes.Results[limiter] = TagsSortResult{
@@ -370,7 +380,10 @@ func (index *Index) GetIndexCross(tags [][]byte, offset int, limit int, reverse 
 		for i := offset; i < offset+limit; i++ {
 			v, _ := treeIntersection.Select(uint32(i))
 			if v == 0 {
-				continue
+				if Config.Debug.Log {
+					log.Println("GetIndexCross: break", i, max)
+				}
+				break
 			}
 			if memo == 0 {
 				TagsSortRes.Results[limiter] = TagsSortResult{

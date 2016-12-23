@@ -1,19 +1,12 @@
 package main
 
 import (
-	"encoding/json"
-	//"log"
-	//"fmt"
-	//"sync"
 	"bytes"
+	"encoding/json"
 	"strconv"
 	"strings"
 	//"github.com/buger/jsonparser"
 )
-
-func ApiStart() {
-	//index := SelectIndex("index")
-}
 
 /*
 	SET /index/
@@ -79,7 +72,7 @@ func (index *Index) SetJson(jsonString string) string {
 		return string(rBinary)
 	}
 
-	jsonRes.ID = byte4UInt32(key) //[]string{fmt.Sprint(byte4UInt32(key))}
+	jsonRes.ID = byte4UInt32(key)
 
 	jsonRes.Status = true
 	rBinary, _ := json.Marshal(jsonRes)
@@ -159,7 +152,6 @@ type TagsSortJsonRes struct {
 }
 
 func (index *Index) TagsSortJson(jsonString string) string {
-	//godaStat := StatStart()
 	var jsonReq TagsSortJsonReq
 
 	/*

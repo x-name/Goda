@@ -1,8 +1,6 @@
 package main
 
 import (
-	//"bytes"
-	//"log"
 	"strings"
 )
 
@@ -55,11 +53,8 @@ var replacerTrim = strings.NewReplacer(
 	"   ", " ",
 	"  ", " ")
 
-func (index Index) InvertedIndex(key []byte, s string) { //, SearchIndexX map[string]map[string]int) map[string]map[string]int {
-	//return
+func (index Index) InvertedIndex(key []byte, s string) {
 	s = replacerSymbols.Replace(s)
-	//s = strings.Trim(s, ".,-~?!\"'`;:()<>[]{}\\|/=_+*&^%$#@ ")
-	//s = strings.Trim(s, " ")
 	s = replacerSymbols2.Replace(s)
 	s = replacerTrim.Replace(s)
 	s = replacerTrim.Replace(s)
